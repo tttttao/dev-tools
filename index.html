@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发工具箱</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .tool-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tool-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .converter-section {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 0;
+        }
+
+        .converter-section h3 {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 10px;
+            text-align: center;
+            padding: 8px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 8px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            transition: border-color 0.3s ease;
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #e1e8ed;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .error {
+            background: #fff5f5;
+            color: #e53e3e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #e53e3e;
+            display: none;
+        }
+
+        .success {
+            background: #f0fff4;
+            color: #38a169;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #38a169;
+            display: none;
+        }
+
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .converter-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                min-width: auto;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .tool-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ 开发工具箱</h1>
+            <p>实用的开发小工具集合</p>
+        </div>
+
+        <div class="tools-grid">
+            <!-- PHP数组与JSON转换工具 -->
+            <div class="tool-card">
+                <div class="tool-title">
+                    <div class="tool-icon">🔄</div>
+                    PHP数组 ⇄ JSON 转换器
+                </div>
+
+                <div class="converter-container">
+                    <div class="converter-section">
+                        <h3>PHP数组格式</h3>
+                        <textarea id="phpInput" placeholder="请输入PHP数组格式，例如：
+array(
+    'name' => '张三',
+    'age' => 25,
+    'skills' => array('PHP', 'JavaScript', 'Python')
+)
+
+或者简化格式：
+[
+    'name' => '张三',
+    'age' => 25,
+    'skills' => ['PHP', 'JavaScript', 'Python']
+]"></textarea>
+                    </div>
+
+                    <div class="converter-section">
+                        <h3>JSON格式</h3>
+                        <textarea id="jsonInput" placeholder="请输入JSON格式，例如：
+{
+    &quot;name&quot;: &quot;张三&quot;,
+    &quot;age&quot;: 25,
+    &quot;skills&quot;: [&quot;PHP&quot;, &quot;JavaScript&quot;, &quot;Python&quot;]
+}"></textarea>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="buttons">
+                        <button class="btn btn-primary" onclick="phpToJson()">PHP → JSON</button>
+                        <button class="btn btn-primary" onclick="jsonToPhp()">JSON → PHP</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">清空</button>
+                    </div>
+
+                    <div class="error" id="errorMsg"></div>
+                    <div class="success" id="successMsg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 显示消息
+        function showMessage(message, type = 'success') {
+            const errorDiv = document.getElementById('errorMsg');
+            const successDiv = document.getElementById('successMsg');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+            }
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // PHP转JSON
+        function phpToJson() {
+            const phpInput = document.getElementById('phpInput').value.trim();
+            if (!phpInput) {
+                showMessage('请输入PHP数组格式', 'error');
+                return;
+            }
+
+            try {
+                // 解析PHP数组语法
+                const jsonResult = parsePHPArray(phpInput);
+                document.getElementById('jsonInput').value = JSON.stringify(jsonResult, null, 2);
+                showMessage('转换成功！');
+            } catch (error) {
+                showMessage('转换失败：' + error.message, 'error');
+            }
+        }
+
+        // JSON转PHP
+        function jsonToPhp() {
+            const jsonInput = document.getElementById('jsonInput').value.trim();
+            if (!jsonInput) {
+                showMessage('请输入JSON格式', 'error');
+                return;
+            }
+
+            try {
+                const jsonObj = JSON.parse(jsonInput);
+                const phpResult = convertToPHP(jsonObj);
+                document.getElementById('phpInput').value = phpResult;
+                showMessage('转换成功！');
+            } catch (error) {
+                showMessage('转换失败：请检查JSON格式是否正确', 'error');
+            }
+        }
+
+        // 清空所有输入
+        function clearAll() {
+            document.getElementById('phpInput').value = '';
+            document.getElementById('jsonInput').value = '';
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'none';
+        }
+
+        // 解析PHP数组
+        function parsePHPArray(phpString) {
+            // 移除PHP标签和多余空格
+            let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+            
+            // 处理array()语法
+            cleanString = cleanString.replace(/array\s*\(/g, '[');
+            
+            // 处理PHP的关联数组语法 => 转为 :
+            cleanString = cleanString.replace(/(\w+|\'.+?\'|".+?")\s*=>\s*/g, function(match, key) {
+                // 如果key不是字符串，添加引号
+                if (!key.match(/^['"]/)) {
+                    key = '"' + key + '"';
+                }
+                return key + ': ';
+            });
+            
+            // 替换PHP的单引号为双引号
+            cleanString = cleanString.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '"$1"');
+            
+            // 处理括号
+            cleanString = cleanString.replace(/\(/g, '[').replace(/\)/g, ']');
+            
+            // 移除尾随分号
+            cleanString = cleanString.replace(/;$/, '');
+            
+            return JSON.parse(cleanString);
+        }
+
+        // 转换为PHP格式
+        function convertToPHP(obj, indent = 0) {
+            const spaces = '    '.repeat(indent);
+            const nextSpaces = '    '.repeat(indent + 1);
+            
+            if (Array.isArray(obj)) {
+                if (obj.length === 0) return '[]';
+                
+                let result = '[\n';
+                obj.forEach((item, index) => {
+                    result += nextSpaces + convertToPHP(item, indent + 1);
+                    if (index < obj.length - 1) result += ',';
+                    result += '\n';
+                });
+                result += spaces + ']';
+                return result;
+            } else if (typeof obj === 'object' && obj !== null) {
+                const keys = Object.keys(obj);
+                if (keys.length === 0) return '[]';
+                
+                let result = '[\n';
+                keys.forEach((key, index) => {
+                    const quotedKey = isNaN(key) ? `'${key}'` : key;
+                    result += nextSpaces + quotedKey + ' => ' + convertToPHP(obj[key], indent + 1);
+                    if (index < keys.length - 1) result += ',';
+                    result += '\n';
+                });
+                result += spaces + ']';
+                return result;
+            } else if (typeof obj === 'string') {
+                return `'${obj.replace(/'/g, "\\'")}'`;
+            } else if (typeof obj === 'boolean') {
+                return obj ? 'true' : 'false';
+            } else if (obj === null) {
+                return 'null';
+            } else {
+                return obj.toString();
+            }
+        }
+
+    </script>
+</body>
+</html>
