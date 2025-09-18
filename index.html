@@ -330,11 +330,20 @@ array(
             }
 
             try {
-                // 解析PHP数组语法
-                const jsonResult = parsePHPArray(phpInput);
+                // 首先尝试智能解析器
+                let jsonResult;
+                try {
+                    jsonResult = smartParsePHPArray(phpInput);
+                    console.log('使用智能解析器成功');
+                } catch (smartError) {
+                    console.log('智能解析器失败，使用基础解析器:', smartError.message);
+                    jsonResult = parsePHPArray(phpInput);
+                }
+                
                 document.getElementById('jsonInput').value = JSON.stringify(jsonResult, null, 2);
                 showMessage('转换成功！');
             } catch (error) {
+                console.error('所有解析器都失败了:', error);
                 showMessage('转换失败：' + error.message, 'error');
             }
         }
@@ -365,42 +374,432 @@ array(
             document.getElementById('successMsg').style.display = 'none';
         }
 
-        // 解析PHP数组
+        // 解析PHP数组 - 增强版
         function parsePHPArray(phpString) {
-            // 移除PHP标签和多余空格
-            let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+            try {
+                // 移除PHP标签和多余空格
+                let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+                
+                // 移除变量声明（如 $array = ）
+                cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
+                
+                // 移除尾随分号
+                cleanString = cleanString.replace(/;$/, '');
+                
+                // 处理array()语法，支持嵌套
+                cleanString = replaceArraySyntax(cleanString);
+                
+                // 处理PHP的关联数组语法 => 转为 :
+                cleanString = replaceArrowSyntax(cleanString);
+                
+                // 替换PHP的单引号为双引号，处理转义
+                cleanString = replaceSingleQuotes(cleanString);
+                
+                // 处理PHP特殊值
+                cleanString = replacePhpValues(cleanString);
+                
+                // 修复键名格式
+                cleanString = fixKeyFormat(cleanString);
+                
+                // 最终清理
+                cleanString = cleanString.trim();
+                
+                console.log('清理后的字符串:', cleanString); // 调试信息
+                
+                return JSON.parse(cleanString);
+            } catch (error) {
+                console.error('解析错误:', error.message);
+                console.error('清理后的字符串:', cleanString);
+                throw new Error('PHP数组格式解析失败：' + error.message + '\n请检查语法是否正确');
+            }
+        }
+        
+        // 递归替换array()语法
+        function replaceArraySyntax(str) {
+            let result = str;
+            let changed = true;
             
-            // 处理array()语法
-            cleanString = cleanString.replace(/array\s*\(/g, '[');
+            while (changed) {
+                const before = result;
+                result = result.replace(/\barray\s*\(/g, '[');
+                changed = before !== result;
+            }
             
-            // 处理PHP的关联数组语法 => 转为 :
-            cleanString = cleanString.replace(/(\w+|\'.+?\'|".+?")\s*=>\s*/g, function(match, key) {
-                // 如果key不是字符串，添加引号
-                if (!key.match(/^['"]/)) {
-                    key = '"' + key + '"';
+            // 平衡括号
+            result = balanceParentheses(result);
+            
+            return result;
+        }
+        
+        // 平衡括号转换
+        function balanceParentheses(str) {
+            let result = '';
+            let depth = 0;
+            let inString = false;
+            let stringChar = '';
+            let escaped = false;
+            
+            for (let i = 0; i < str.length; i++) {
+                const char = str[i];
+                
+                if (escaped) {
+                    result += char;
+                    escaped = false;
+                    continue;
                 }
-                return key + ': ';
+                
+                if (char === '\\') {
+                    result += char;
+                    escaped = true;
+                    continue;
+                }
+                
+                if (!inString && (char === '"' || char === "'")) {
+                    inString = true;
+                    stringChar = char;
+                    result += char;
+                    continue;
+                }
+                
+                if (inString && char === stringChar) {
+                    inString = false;
+                    stringChar = '';
+                    result += char;
+                    continue;
+                }
+                
+                if (inString) {
+                    result += char;
+                    continue;
+                }
+                
+                if (char === '(') {
+                    depth++;
+                    result += '[';
+                } else if (char === ')') {
+                    depth--;
+                    result += ']';
+                } else {
+                    result += char;
+                }
+            }
+            
+            return result;
+        }
+        
+        // 替换箭头语法 - 改进版
+        function replaceArrowSyntax(str) {
+            // 更精确的正则表达式，处理各种键类型和嵌套结构
+            return str.replace(/((?:'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\.[^"\\]*)*"|\w+|\d+))\s*=>\s*/g, function(match, key) {
+                // 数字键不需要引号
+                if (/^\d+$/.test(key)) {
+                    return key + ': ';
+                }
+                // 已经有引号的保持原样
+                if (key.match(/^['"]/)) {
+                    return key + ': ';
+                }
+                // 其他情况添加双引号
+                return '"' + key + '": ';
+            });
+        }
+        
+        // 修复键名格式
+        function fixKeyFormat(str) {
+            // 处理没有引号的字符串键名
+            return str.replace(/(\w+)(\s*:\s*)/g, function(match, key, colon) {
+                // 如果键名不是数字且没有引号，添加双引号
+                if (!/^\d+$/.test(key) && !key.match(/^['"]/)) {
+                    return '"' + key + '"' + colon;
+                }
+                return match;
+            });
+        }
+        
+        // 替换单引号为双引号
+        function replaceSingleQuotes(str) {
+            let result = '';
+            let inDoubleQuote = false;
+            let escaped = false;
+            
+            for (let i = 0; i < str.length; i++) {
+                const char = str[i];
+                
+                if (escaped) {
+                    result += char;
+                    escaped = false;
+                    continue;
+                }
+                
+                if (char === '\\') {
+                    result += char;
+                    escaped = true;
+                    continue;
+                }
+                
+                if (char === '"') {
+                    inDoubleQuote = !inDoubleQuote;
+                    result += char;
+                    continue;
+                }
+                
+                if (inDoubleQuote) {
+                    result += char;
+                    continue;
+                }
+                
+                if (char === "'") {
+                    result += '"';
+                } else {
+                    result += char;
+                }
+            }
+            
+            return result;
+        }
+        
+        // 替换PHP特殊值
+        function replacePhpValues(str) {
+            // 不在字符串内的PHP值替换
+            let result = str.replace(/\b(true|false|null|TRUE|FALSE|NULL)\b/g, function(match) {
+                return match.toLowerCase();
             });
             
-            // 替换PHP的单引号为双引号
-            cleanString = cleanString.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, '"$1"');
+            // 处理PHP特殊数值
+            result = result.replace(/\bINF\b/g, '"Infinity"');
+            result = result.replace(/\bNAN\b/g, '"NaN"');
+            result = result.replace(/\b-INF\b/g, '"-Infinity"');
             
-            // 处理括号
-            cleanString = cleanString.replace(/\(/g, '[').replace(/\)/g, ']');
+            return result;
+        }
+        
+        // 智能PHP数组解析器 - 处理复杂嵌套结构
+        function smartParsePHPArray(phpString) {
+            try {
+                // 预处理
+                let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+                cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
+                cleanString = cleanString.replace(/;$/, '');
+                
+                // 使用状态机解析
+                const tokens = tokenize(cleanString);
+                const ast = parseTokens(tokens);
+                return ast;
+            } catch (error) {
+                console.error('智能解析失败，回退到基础解析器:', error);
+                // 回退到原始解析方法
+                return parsePHPArrayFallback(phpString);
+            }
+        }
+        
+        // 词法分析
+        function tokenize(str) {
+            const tokens = [];
+            let i = 0;
             
-            // 移除尾随分号
+            while (i < str.length) {
+                const char = str[i];
+                
+                if (/\s/.test(char)) {
+                    i++;
+                    continue;
+                }
+                
+                // 字符串
+                if (char === '"' || char === "'") {
+                    const quote = char;
+                    let value = '';
+                    i++;
+                    while (i < str.length && str[i] !== quote) {
+                        if (str[i] === '\\' && i + 1 < str.length) {
+                            value += str[i] + str[i + 1];
+                            i += 2;
+                        } else {
+                            value += str[i];
+                            i++;
+                        }
+                    }
+                    tokens.push({type: 'STRING', value: value, quote: quote});
+                    i++;
+                    continue;
+                }
+                
+                // 数字
+                if (/\d/.test(char) || (char === '-' && /\d/.test(str[i + 1]))) {
+                    let value = '';
+                    if (char === '-') {
+                        value += char;
+                        i++;
+                    }
+                    while (i < str.length && /[\d.]/.test(str[i])) {
+                        value += str[i];
+                        i++;
+                    }
+                    tokens.push({type: 'NUMBER', value: parseFloat(value)});
+                    continue;
+                }
+                
+                // 关键字和标识符
+                if (/[a-zA-Z_]/.test(char)) {
+                    let value = '';
+                    while (i < str.length && /[a-zA-Z0-9_]/.test(str[i])) {
+                        value += str[i];
+                        i++;
+                    }
+                    
+                    if (value === 'array') {
+                        tokens.push({type: 'ARRAY'});
+                    } else if (['true', 'false', 'null'].includes(value.toLowerCase())) {
+                        tokens.push({type: 'LITERAL', value: value.toLowerCase()});
+                    } else {
+                        tokens.push({type: 'IDENTIFIER', value: value});
+                    }
+                    continue;
+                }
+                
+                // 符号
+                if (char === '=' && str[i + 1] === '>') {
+                    tokens.push({type: 'ARROW'});
+                    i += 2;
+                    continue;
+                }
+                
+                // 单字符符号
+                const singleChars = {
+                    '[': 'LBRACKET',
+                    ']': 'RBRACKET',
+                    '(': 'LPAREN',
+                    ')': 'RPAREN',
+                    ',': 'COMMA'
+                };
+                
+                if (singleChars[char]) {
+                    tokens.push({type: singleChars[char]});
+                    i++;
+                    continue;
+                }
+                
+                i++;
+            }
+            
+            return tokens;
+        }
+        
+        // 语法分析
+        function parseTokens(tokens) {
+            let pos = 0;
+            
+            function parseValue() {
+                const token = tokens[pos];
+                
+                if (!token) {
+                    throw new Error('意外的输入结束');
+                }
+                
+                if (token.type === 'STRING') {
+                    pos++;
+                    return token.value;
+                }
+                
+                if (token.type === 'NUMBER') {
+                    pos++;
+                    return token.value;
+                }
+                
+                if (token.type === 'LITERAL') {
+                    pos++;
+                    return token.value === 'true' ? true : 
+                           token.value === 'false' ? false : null;
+                }
+                
+                if (token.type === 'LBRACKET' || token.type === 'ARRAY') {
+                    return parseArray();
+                }
+                
+                throw new Error('无法解析的值: ' + JSON.stringify(token));
+            }
+            
+            function parseArray() {
+                const result = {};
+                let isIndexedArray = true;
+                let index = 0;
+                
+                // 跳过 'array' 关键字或 '['
+                if (tokens[pos]?.type === 'ARRAY') {
+                    pos++;
+                    if (tokens[pos]?.type === 'LPAREN') pos++;
+                } else if (tokens[pos]?.type === 'LBRACKET') {
+                    pos++;
+                }
+                
+                while (pos < tokens.length && 
+                       tokens[pos]?.type !== 'RBRACKET' && 
+                       tokens[pos]?.type !== 'RPAREN') {
+                    
+                    let key = index;
+                    let value;
+                    
+                    // 检查是否有键
+                    if (pos + 1 < tokens.length && tokens[pos + 1]?.type === 'ARROW') {
+                        key = parseValue();
+                        pos++; // 跳过 '=>'
+                        isIndexedArray = false;
+                    }
+                    
+                    value = parseValue();
+                    result[key] = value;
+                    
+                    if (isIndexedArray) index++;
+                    
+                    // 跳过逗号
+                    if (tokens[pos]?.type === 'COMMA') {
+                        pos++;
+                    }
+                }
+                
+                // 跳过结束符号
+                if (tokens[pos]?.type === 'RBRACKET' || tokens[pos]?.type === 'RPAREN') {
+                    pos++;
+                }
+                
+                // 如果是纯索引数组，转换为数组
+                if (isIndexedArray) {
+                    const arr = [];
+                    for (let i = 0; i < index; i++) {
+                        arr[i] = result[i];
+                    }
+                    return arr;
+                }
+                
+                return result;
+            }
+            
+            return parseValue();
+        }
+        
+        // 备用解析器
+        function parsePHPArrayFallback(phpString) {
+            let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+            cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
             cleanString = cleanString.replace(/;$/, '');
-            
+            cleanString = replaceArraySyntax(cleanString);
+            cleanString = replaceArrowSyntax(cleanString);
+            cleanString = replaceSingleQuotes(cleanString);
+            cleanString = replacePhpValues(cleanString);
+            cleanString = fixKeyFormat(cleanString);
             return JSON.parse(cleanString);
         }
 
-        // 转换为PHP格式
-        function convertToPHP(obj, indent = 0) {
+        // 转换为PHP格式 - 增强版
+        function convertToPHP(obj, indent = 0, isRoot = false) {
             const spaces = '    '.repeat(indent);
             const nextSpaces = '    '.repeat(indent + 1);
             
             if (Array.isArray(obj)) {
                 if (obj.length === 0) return '[]';
+                
+                // 检查是否为索引数组
+                const isIndexedArray = obj.every((item, index) => true);
                 
                 let result = '[\n';
                 obj.forEach((item, index) => {
@@ -414,21 +813,50 @@ array(
                 const keys = Object.keys(obj);
                 if (keys.length === 0) return '[]';
                 
+                // 检查是否为纯数字索引的对象
+                const isNumericKeys = keys.every(key => /^\d+$/.test(key));
+                const isSequentialKeys = isNumericKeys && keys.length > 0 && 
+                    keys.map(Number).sort((a, b) => a - b).every((num, index) => num === index);
+                
                 let result = '[\n';
                 keys.forEach((key, index) => {
-                    const quotedKey = isNaN(key) ? `'${key}'` : key;
-                    result += nextSpaces + quotedKey + ' => ' + convertToPHP(obj[key], indent + 1);
+                    let quotedKey;
+                    if (isNumericKeys && isSequentialKeys) {
+                        // 连续数字索引，可以省略键
+                        quotedKey = '';
+                    } else if (/^\d+$/.test(key)) {
+                        // 数字键
+                        quotedKey = key + ' => ';
+                    } else {
+                        // 字符串键，转义特殊字符
+                        const escapedKey = key.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                        quotedKey = `'${escapedKey}' => `;
+                    }
+                    
+                    result += nextSpaces + quotedKey + convertToPHP(obj[key], indent + 1);
                     if (index < keys.length - 1) result += ',';
                     result += '\n';
                 });
                 result += spaces + ']';
                 return result;
             } else if (typeof obj === 'string') {
-                return `'${obj.replace(/'/g, "\\'")}'`;
+                // 更好的字符串转义处理
+                const escaped = obj
+                    .replace(/\\/g, '\\\\')  // 反斜杠
+                    .replace(/'/g, "\\'")    // 单引号
+                    .replace(/\n/g, '\\n')   // 换行符
+                    .replace(/\r/g, '\\r')   // 回车符
+                    .replace(/\t/g, '\\t');  // 制表符
+                return `'${escaped}'`;
             } else if (typeof obj === 'boolean') {
                 return obj ? 'true' : 'false';
             } else if (obj === null) {
                 return 'null';
+            } else if (typeof obj === 'number') {
+                // 处理特殊数字值
+                if (isNaN(obj)) return 'NAN';
+                if (!isFinite(obj)) return obj > 0 ? 'INF' : '-INF';
+                return obj.toString();
             } else {
                 return obj.toString();
             }
