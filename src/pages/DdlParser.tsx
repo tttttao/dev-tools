@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useToast } from '../hooks/useToast'
 import { useClipboard } from '../hooks/useClipboard'
 import { parseDDL, generateMarkdown, getIndexTypeLabel } from '../lib/ddl-parser'
-import type { DDLParseResult, TableInfo, TableIndex, IndexType } from '../types/ddl'
+import type { DDLParseResult, TableInfo, TableIndex } from '../types/ddl'
 
 /**
  * VS Code 风格图标

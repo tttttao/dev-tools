@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import React, { createContext, useContext, useState, useCallback } from 'react'
 
 /**
  * Toast 类型
@@ -142,7 +143,7 @@ function ToastContainer({ toasts, onRemove }: { toasts: Toast[]; onRemove: (id: 
  */
 function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
   // 类型对应的样式
-  const typeConfig: Record<ToastType, { bg: string; border: string; iconColor: string; icon: JSX.Element }> = {
+  const typeConfig: Record<ToastType, { bg: string; border: string; iconColor: string; icon: React.ReactNode }> = {
     success: {
       bg: '#1e1e1e',
       border: '#89d185',

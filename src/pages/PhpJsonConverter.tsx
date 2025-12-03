@@ -6,12 +6,6 @@ import { parsePHPArray, convertToPHP } from '../lib/php-parser'
 /**
  * VS Code 风格图标
  */
-const PlayIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M8 5v14l11-7z" />
-  </svg>
-)
-
 const CopyIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
@@ -47,12 +41,10 @@ function CodeEditor({
   value, 
   onChange, 
   placeholder,
-  language
 }: { 
   value: string
   onChange: (value: string) => void
   placeholder: string
-  language: string
 }) {
   const lines = value ? value.split('\n') : ['']
   const lineCount = Math.max(lines.length, 12)
@@ -222,7 +214,6 @@ export function PhpJsonConverter() {
     'age' => 25,
     'skills' => array('PHP', 'JavaScript')
 )`}
-              language="php"
             />
           </div>
         </div>
@@ -278,7 +269,6 @@ export function PhpJsonConverter() {
     "age": 25,
     "skills": ["PHP", "JavaScript"]
 }`}
-              language="json"
             />
           </div>
         </div>
