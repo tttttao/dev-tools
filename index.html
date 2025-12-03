@@ -14,124 +14,229 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            padding: 20px;
-            overflow: hidden;
-            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 导航菜单样式 */
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-logo {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: 40px;
+            cursor: pointer;
+        }
+
+        .nav-logo:hover {
+            color: #764ba2;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-item .nav-icon {
+            font-size: 16px;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            padding: 30px 20px;
+            overflow-y: auto;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
         }
 
-        .header {
+        /* 工具页面 */
+        .tool-page {
+            display: none;
+        }
+
+        .tool-page.active {
+            display: block;
+        }
+
+        /* 首页样式 */
+        .home-header {
             text-align: center;
             color: white;
-            margin-bottom: 20px;
-            flex-shrink: 0;
+            margin-bottom: 40px;
         }
 
-        .header h1 {
-            font-size: 2rem;
-            margin-bottom: 5px;
+        .home-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
             font-weight: 300;
         }
 
-        .header p {
-            font-size: 1rem;
+        .home-header p {
+            font-size: 1.1rem;
             opacity: 0.9;
         }
 
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            flex: 1;
-            overflow: hidden;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
+        .tool-card-home {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tool-card-home:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .tool-card-home .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .tool-card-home h3 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .tool-card-home p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* 工具卡片通用样式 */
         .tool-card {
             background: white;
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
         }
 
-        .tool-title {
-            font-size: 1.3rem;
-            color: #333;
-            margin-bottom: 15px;
+        .tool-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            text-align: center;
-            justify-content: center;
-            flex-shrink: 0;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
-        .tool-icon {
-            width: 30px;
-            height: 30px;
+        .tool-header .icon {
+            width: 40px;
+            height: 40px;
             background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
+            font-size: 20px;
         }
 
+        .tool-header h2 {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* 转换器布局 */
         .converter-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            align-items: start;
-            flex: 1;
-            overflow: hidden;
         }
 
         .converter-section {
             display: flex;
             flex-direction: column;
-            height: 100%;
-            min-height: 0;
         }
 
         .converter-section h3 {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 10px;
-            text-align: center;
-            padding: 8px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            font-size: 0.95rem;
             color: white;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             border-radius: 8px;
             font-weight: 500;
-            flex-shrink: 0;
+            text-align: center;
         }
 
         textarea {
             width: 100%;
+            height: 300px;
             padding: 15px;
             border: 2px solid #e1e8ed;
             border-radius: 10px;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.5;
-            resize: none;
+            resize: vertical;
             transition: border-color 0.3s ease;
-            flex: 1;
-            min-height: 0;
-            overflow-y: auto;
         }
 
         textarea:focus {
@@ -139,30 +244,26 @@
             border-color: #667eea;
         }
 
+        .control-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
         .buttons {
             display: flex;
             gap: 15px;
-            margin: 15px 0;
-            flex-wrap: wrap;
             justify-content: center;
-        }
-
-        .control-section {
-            grid-column: 1 / -1;
-            text-align: center;
-            flex-shrink: 0;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 12px 28px;
             border: none;
             border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            flex: 1;
-            min-width: 120px;
         }
 
         .btn-primary {
@@ -185,79 +286,376 @@
             background: #e9ecef;
         }
 
-        .error {
+        .message {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .message.error {
             background: #fff5f5;
             color: #e53e3e;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
             border-left: 4px solid #e53e3e;
-            display: none;
         }
 
-        .success {
+        .message.success {
             background: #f0fff4;
             color: #38a169;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
             border-left: 4px solid #38a169;
-            display: none;
         }
 
+        /* DDL解析器样式 */
+        .ddl-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
+        .ddl-input-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ddl-input-section h3 {
+            font-size: 0.95rem;
+            color: white;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .ddl-control-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ddl-control-section .buttons {
+            flex-direction: column;
+        }
+
+        .ddl-output-section {
+            grid-column: 1 / -1;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 200px;
+        }
+
+        .ddl-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 150px;
+            color: #999;
+        }
+
+        .ddl-placeholder span {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .table-info {
+            margin-bottom: 20px;
+        }
+
+        .table-info h4 {
+            font-size: 1.1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .table-info .table-name {
+            color: #667eea;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .table-info .table-comment {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .ddl-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .ddl-table th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .ddl-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .ddl-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ddl-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .field-name {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .field-type {
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #667eea;
+        }
+
+        .field-nullable {
+            text-align: center;
+        }
+
+        .nullable-yes {
+            color: #38a169;
+        }
+
+        .nullable-no {
+            color: #e53e3e;
+        }
+
+        .field-default {
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .field-comment {
+            color: #555;
+            max-width: 200px;
+        }
+
+        .index-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            margin: 2px;
+            white-space: nowrap;
+        }
+
+        .index-primary {
+            background: linear-gradient(45deg, #f6e05e, #ecc94b);
+            color: #744210;
+        }
+
+        .index-unique {
+            background: linear-gradient(45deg, #68d391, #48bb78);
+            color: #22543d;
+        }
+
+        .index-normal {
+            background: linear-gradient(45deg, #63b3ed, #4299e1);
+            color: #1a365d;
+        }
+
+        .index-fulltext {
+            background: linear-gradient(45deg, #b794f4, #9f7aea);
+            color: #44337a;
+        }
+
+        .index-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .index-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #e1e8ed;
+        }
+
+        .index-section h5 {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .index-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .index-item {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .index-item .index-name {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-weight: 500;
+            color: #333;
+            min-width: 150px;
+        }
+
+        .index-item .index-columns {
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #667eea;
+            flex: 1;
+        }
+
+        .index-item .index-table {
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #38a169;
+            font-size: 12px;
+        }
+
+        /* 响应式设计 */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
+            .nav-container {
+                flex-direction: column;
+                height: auto;
+                padding: 15px 0;
             }
-            
+
+            .nav-logo {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-item {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+
+            .converter-container,
+            .ddl-container {
+                grid-template-columns: 1fr;
+            }
+
+            .home-header h1 {
+                font-size: 1.8rem;
+            }
+
             .tools-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .converter-container {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
+
             .buttons {
                 flex-direction: column;
-                gap: 10px;
             }
-            
+
             .btn {
-                min-width: auto;
+                width: 100%;
             }
-            
-            .header h1 {
-                font-size: 1.5rem;
+
+            .ddl-table {
+                font-size: 11px;
             }
-            
-            .tool-card {
-                padding: 15px;
+
+            .ddl-table th,
+            .ddl-table td {
+                padding: 8px 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🛠️ 开发工具箱</h1>
-            <p>实用的开发小工具集合</p>
+    <!-- 导航栏 -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-logo" onclick="showPage('home')">
+                🛠️ 开发工具箱
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="home" onclick="showPage('home')">
+                    <span class="nav-icon">🏠</span>
+                    首页
+                </li>
+                <li class="nav-item" data-page="php-json" onclick="showPage('php-json')">
+                    <span class="nav-icon">🔄</span>
+                    PHP/JSON转换
+                </li>
+                <li class="nav-item" data-page="ddl-parser" onclick="showPage('ddl-parser')">
+                    <span class="nav-icon">📋</span>
+                    DDL解析器
+                </li>
+            </ul>
         </div>
+    </nav>
 
-        <div class="tools-grid">
-            <!-- PHP数组与JSON转换工具 -->
-            <div class="tool-card">
-                <div class="tool-title">
-                    <div class="tool-icon">🔄</div>
-                    PHP数组 ⇄ JSON 转换器
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <div class="container">
+            <!-- 首页 -->
+            <div id="page-home" class="tool-page active">
+                <div class="home-header">
+                    <h1>🛠️ 开发工具箱</h1>
+                    <p>实用的开发小工具集合，提升你的开发效率</p>
                 </div>
 
-                <div class="converter-container">
-                    <div class="converter-section">
-                        <h3>PHP数组格式</h3>
-                        <textarea id="phpInput" placeholder="请输入PHP数组格式，例如：
+                <div class="tools-grid">
+                    <div class="tool-card-home" onclick="showPage('php-json')">
+                        <div class="card-icon">🔄</div>
+                        <h3>PHP数组 ⇄ JSON 转换器</h3>
+                        <p>快速在 PHP 数组格式和 JSON 格式之间进行转换，支持嵌套结构和各种数据类型。</p>
+                    </div>
+
+                    <div class="tool-card-home" onclick="showPage('ddl-parser')">
+                        <div class="card-icon">📋</div>
+                        <h3>DDL 解析器</h3>
+                        <p>解析 MySQL DDL 语句（CREATE TABLE / CREATE INDEX），生成清晰的表格展示字段信息和索引关系。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHP/JSON 转换器 -->
+            <div id="page-php-json" class="tool-page">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="icon">🔄</div>
+                        <h2>PHP数组 ⇄ JSON 转换器</h2>
+                    </div>
+
+                    <div class="converter-container">
+                        <div class="converter-section">
+                            <h3>PHP数组格式</h3>
+                            <textarea id="phpInput" placeholder="请输入PHP数组格式，例如：
 array(
     'name' => '张三',
     'age' => 25,
@@ -270,38 +668,116 @@ array(
     'age' => 25,
     'skills' => ['PHP', 'JavaScript', 'Python']
 ]"></textarea>
+                        </div>
+
+                        <div class="converter-section">
+                            <h3>JSON格式</h3>
+                            <textarea id="jsonInput" placeholder='请输入JSON格式，例如：
+{
+    "name": "张三",
+    "age": 25,
+    "skills": ["PHP", "JavaScript", "Python"]
+}'></textarea>
+                        </div>
                     </div>
 
-                    <div class="converter-section">
-                        <h3>JSON格式</h3>
-                        <textarea id="jsonInput" placeholder="请输入JSON格式，例如：
-{
-    &quot;name&quot;: &quot;张三&quot;,
-    &quot;age&quot;: 25,
-    &quot;skills&quot;: [&quot;PHP&quot;, &quot;JavaScript&quot;, &quot;Python&quot;]
-}"></textarea>
+                    <div class="control-section">
+                        <div class="buttons">
+                            <button class="btn btn-primary" onclick="phpToJson()">PHP → JSON</button>
+                            <button class="btn btn-primary" onclick="jsonToPhp()">JSON → PHP</button>
+                            <button class="btn btn-secondary" onclick="clearPhpJson()">清空</button>
+                        </div>
+
+                        <div class="message error" id="phpJsonErrorMsg"></div>
+                        <div class="message success" id="phpJsonSuccessMsg"></div>
                     </div>
                 </div>
+            </div>
 
-                <div class="control-section">
-                    <div class="buttons">
-                        <button class="btn btn-primary" onclick="phpToJson()">PHP → JSON</button>
-                        <button class="btn btn-primary" onclick="jsonToPhp()">JSON → PHP</button>
-                        <button class="btn btn-secondary" onclick="clearAll()">清空</button>
+            <!-- DDL 解析器 -->
+            <div id="page-ddl-parser" class="tool-page">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="icon">📋</div>
+                        <h2>DDL 解析器</h2>
                     </div>
 
-                    <div class="error" id="errorMsg"></div>
-                    <div class="success" id="successMsg"></div>
+                    <div class="ddl-container">
+                        <div class="ddl-input-section">
+                            <h3>输入DDL语句</h3>
+                            <textarea id="ddlInput" placeholder="支持 CREATE TABLE 和 CREATE INDEX 语句，例如：
+
+CREATE TABLE `users` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+    `username` varchar(50) NOT NULL COMMENT '用户名',
+    `email` varchar(100) NOT NULL COMMENT '邮箱',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_username` (`username`),
+    KEY `idx_email` (`email`)
+) ENGINE=InnoDB COMMENT='用户表';
+
+CREATE INDEX idx_created_at ON users (created_at);
+CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
+                        </div>
+
+                        <div class="ddl-control-section">
+                            <div class="buttons">
+                                <button class="btn btn-primary" onclick="parseDDL()">解析DDL</button>
+                                <button class="btn btn-secondary" onclick="clearDDL()">清空</button>
+                                <button class="btn btn-secondary" onclick="copyTableAsMarkdown()">复制为Markdown</button>
+                            </div>
+                            <div class="message error" id="ddlErrorMsg"></div>
+                            <div class="message success" id="ddlSuccessMsg"></div>
+                        </div>
+                    </div>
+
+                    <div class="ddl-output-section" id="ddlOutput">
+                        <div class="ddl-placeholder">
+                            <span>📊</span>
+                            <p>解析结果将显示在这里</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
-        // 显示消息
-        function showMessage(message, type = 'success') {
-            const errorDiv = document.getElementById('errorMsg');
-            const successDiv = document.getElementById('successMsg');
+        // ==================== 页面导航 ====================
+        function showPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.tool-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 显示目标页面
+            document.getElementById('page-' + pageId).classList.add('active');
+            
+            // 更新导航菜单状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === pageId) {
+                    item.classList.add('active');
+                }
+            });
+
+            // 更新 URL hash
+            window.location.hash = pageId;
+        }
+
+        // 页面加载时检查 hash
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.slice(1);
+            if (hash && document.getElementById('page-' + hash)) {
+                showPage(hash);
+            }
+        });
+
+        // ==================== PHP/JSON 转换功能 ====================
+        
+        function showPhpJsonMessage(message, type = 'success') {
+            const errorDiv = document.getElementById('phpJsonErrorMsg');
+            const successDiv = document.getElementById('phpJsonSuccessMsg');
             
             errorDiv.style.display = 'none';
             successDiv.style.display = 'none';
@@ -314,45 +790,38 @@ array(
                 successDiv.style.display = 'block';
             }
             
-            // 3秒后自动隐藏
             setTimeout(() => {
                 errorDiv.style.display = 'none';
                 successDiv.style.display = 'none';
             }, 3000);
         }
 
-        // PHP转JSON
         function phpToJson() {
             const phpInput = document.getElementById('phpInput').value.trim();
             if (!phpInput) {
-                showMessage('请输入PHP数组格式', 'error');
+                showPhpJsonMessage('请输入PHP数组格式', 'error');
                 return;
             }
 
             try {
-                // 首先尝试智能解析器
                 let jsonResult;
                 try {
                     jsonResult = smartParsePHPArray(phpInput);
-                    console.log('使用智能解析器成功');
                 } catch (smartError) {
-                    console.log('智能解析器失败，使用基础解析器:', smartError.message);
                     jsonResult = parsePHPArray(phpInput);
                 }
                 
                 document.getElementById('jsonInput').value = JSON.stringify(jsonResult, null, 2);
-                showMessage('转换成功！');
+                showPhpJsonMessage('转换成功！');
             } catch (error) {
-                console.error('所有解析器都失败了:', error);
-                showMessage('转换失败：' + error.message, 'error');
+                showPhpJsonMessage('转换失败：' + error.message, 'error');
             }
         }
 
-        // JSON转PHP
         function jsonToPhp() {
             const jsonInput = document.getElementById('jsonInput').value.trim();
             if (!jsonInput) {
-                showMessage('请输入JSON格式', 'error');
+                showPhpJsonMessage('请输入JSON格式', 'error');
                 return;
             }
 
@@ -360,81 +829,45 @@ array(
                 const jsonObj = JSON.parse(jsonInput);
                 const phpResult = convertToPHP(jsonObj);
                 document.getElementById('phpInput').value = phpResult;
-                showMessage('转换成功！');
+                showPhpJsonMessage('转换成功！');
             } catch (error) {
-                showMessage('转换失败：请检查JSON格式是否正确', 'error');
+                showPhpJsonMessage('转换失败：请检查JSON格式是否正确', 'error');
             }
         }
 
-        // 清空所有输入
-        function clearAll() {
+        function clearPhpJson() {
             document.getElementById('phpInput').value = '';
             document.getElementById('jsonInput').value = '';
-            document.getElementById('errorMsg').style.display = 'none';
-            document.getElementById('successMsg').style.display = 'none';
+            document.getElementById('phpJsonErrorMsg').style.display = 'none';
+            document.getElementById('phpJsonSuccessMsg').style.display = 'none';
         }
 
-        // 解析PHP数组 - 增强版
+        // PHP数组解析器
         function parsePHPArray(phpString) {
-            try {
-                // 移除PHP标签和多余空格
-                let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
-                
-                // 移除变量声明（如 $array = ）
-                cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
-                
-                // 移除尾随分号
-                cleanString = cleanString.replace(/;$/, '');
-                
-                // 处理array()语法，支持嵌套
-                cleanString = replaceArraySyntax(cleanString);
-                
-                // 处理PHP的关联数组语法 => 转为 :
-                cleanString = replaceArrowSyntax(cleanString);
-                
-                // 替换PHP的单引号为双引号，处理转义
-                cleanString = replaceSingleQuotes(cleanString);
-                
-                // 处理PHP特殊值
-                cleanString = replacePhpValues(cleanString);
-                
-                // 修复键名格式
-                cleanString = fixKeyFormat(cleanString);
-                
-                // 最终清理
-                cleanString = cleanString.trim();
-                
-                console.log('清理后的字符串:', cleanString); // 调试信息
-                
-                return JSON.parse(cleanString);
-            } catch (error) {
-                console.error('解析错误:', error.message);
-                console.error('清理后的字符串:', cleanString);
-                throw new Error('PHP数组格式解析失败：' + error.message + '\n请检查语法是否正确');
-            }
+            let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+            cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
+            cleanString = cleanString.replace(/;$/, '');
+            cleanString = replaceArraySyntax(cleanString);
+            cleanString = replaceArrowSyntax(cleanString);
+            cleanString = replaceSingleQuotes(cleanString);
+            cleanString = replacePhpValues(cleanString);
+            cleanString = fixKeyFormat(cleanString);
+            return JSON.parse(cleanString);
         }
         
-        // 递归替换array()语法
         function replaceArraySyntax(str) {
             let result = str;
             let changed = true;
-            
             while (changed) {
                 const before = result;
                 result = result.replace(/\barray\s*\(/g, '[');
                 changed = before !== result;
             }
-            
-            // 平衡括号
-            result = balanceParentheses(result);
-            
-            return result;
+            return balanceParentheses(result);
         }
         
-        // 平衡括号转换
         function balanceParentheses(str) {
             let result = '';
-            let depth = 0;
             let inString = false;
             let stringChar = '';
             let escaped = false;
@@ -474,10 +907,8 @@ array(
                 }
                 
                 if (char === '(') {
-                    depth++;
                     result += '[';
                 } else if (char === ')') {
-                    depth--;
                     result += ']';
                 } else {
                     result += char;
@@ -487,28 +918,16 @@ array(
             return result;
         }
         
-        // 替换箭头语法 - 改进版
         function replaceArrowSyntax(str) {
-            // 更精确的正则表达式，处理各种键类型和嵌套结构
             return str.replace(/((?:'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\.[^"\\]*)*"|\w+|\d+))\s*=>\s*/g, function(match, key) {
-                // 数字键不需要引号
-                if (/^\d+$/.test(key)) {
-                    return key + ': ';
-                }
-                // 已经有引号的保持原样
-                if (key.match(/^['"]/)) {
-                    return key + ': ';
-                }
-                // 其他情况添加双引号
+                if (/^\d+$/.test(key)) return key + ': ';
+                if (key.match(/^['"]/)) return key + ': ';
                 return '"' + key + '": ';
             });
         }
         
-        // 修复键名格式
         function fixKeyFormat(str) {
-            // 处理没有引号的字符串键名
             return str.replace(/(\w+)(\s*:\s*)/g, function(match, key, colon) {
-                // 如果键名不是数字且没有引号，添加双引号
                 if (!/^\d+$/.test(key) && !key.match(/^['"]/)) {
                     return '"' + key + '"' + colon;
                 }
@@ -516,7 +935,6 @@ array(
             });
         }
         
-        // 替换单引号为双引号
         function replaceSingleQuotes(str) {
             let result = '';
             let inDoubleQuote = false;
@@ -558,41 +976,26 @@ array(
             return result;
         }
         
-        // 替换PHP特殊值
         function replacePhpValues(str) {
-            // 不在字符串内的PHP值替换
             let result = str.replace(/\b(true|false|null|TRUE|FALSE|NULL)\b/g, function(match) {
                 return match.toLowerCase();
             });
-            
-            // 处理PHP特殊数值
             result = result.replace(/\bINF\b/g, '"Infinity"');
             result = result.replace(/\bNAN\b/g, '"NaN"');
             result = result.replace(/\b-INF\b/g, '"-Infinity"');
-            
             return result;
         }
         
-        // 智能PHP数组解析器 - 处理复杂嵌套结构
+        // 智能PHP数组解析器
         function smartParsePHPArray(phpString) {
-            try {
-                // 预处理
-                let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
-                cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
-                cleanString = cleanString.replace(/;$/, '');
-                
-                // 使用状态机解析
-                const tokens = tokenize(cleanString);
-                const ast = parseTokens(tokens);
-                return ast;
-            } catch (error) {
-                console.error('智能解析失败，回退到基础解析器:', error);
-                // 回退到原始解析方法
-                return parsePHPArrayFallback(phpString);
-            }
+            let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+            cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
+            cleanString = cleanString.replace(/;$/, '');
+            
+            const tokens = tokenize(cleanString);
+            return parseTokens(tokens);
         }
         
-        // 词法分析
         function tokenize(str) {
             const tokens = [];
             let i = 0;
@@ -600,12 +1003,8 @@ array(
             while (i < str.length) {
                 const char = str[i];
                 
-                if (/\s/.test(char)) {
-                    i++;
-                    continue;
-                }
+                if (/\s/.test(char)) { i++; continue; }
                 
-                // 字符串
                 if (char === '"' || char === "'") {
                     const quote = char;
                     let value = '';
@@ -624,13 +1023,9 @@ array(
                     continue;
                 }
                 
-                // 数字
                 if (/\d/.test(char) || (char === '-' && /\d/.test(str[i + 1]))) {
                     let value = '';
-                    if (char === '-') {
-                        value += char;
-                        i++;
-                    }
+                    if (char === '-') { value += char; i++; }
                     while (i < str.length && /[\d.]/.test(str[i])) {
                         value += str[i];
                         i++;
@@ -639,7 +1034,6 @@ array(
                     continue;
                 }
                 
-                // 关键字和标识符
                 if (/[a-zA-Z_]/.test(char)) {
                     let value = '';
                     while (i < str.length && /[a-zA-Z0-9_]/.test(str[i])) {
@@ -657,22 +1051,13 @@ array(
                     continue;
                 }
                 
-                // 符号
                 if (char === '=' && str[i + 1] === '>') {
                     tokens.push({type: 'ARROW'});
                     i += 2;
                     continue;
                 }
                 
-                // 单字符符号
-                const singleChars = {
-                    '[': 'LBRACKET',
-                    ']': 'RBRACKET',
-                    '(': 'LPAREN',
-                    ')': 'RPAREN',
-                    ',': 'COMMA'
-                };
-                
+                const singleChars = {'[': 'LBRACKET', ']': 'RBRACKET', '(': 'LPAREN', ')': 'RPAREN', ',': 'COMMA'};
                 if (singleChars[char]) {
                     tokens.push({type: singleChars[char]});
                     i++;
@@ -685,36 +1070,20 @@ array(
             return tokens;
         }
         
-        // 语法分析
         function parseTokens(tokens) {
             let pos = 0;
             
             function parseValue() {
                 const token = tokens[pos];
+                if (!token) throw new Error('意外的输入结束');
                 
-                if (!token) {
-                    throw new Error('意外的输入结束');
-                }
-                
-                if (token.type === 'STRING') {
-                    pos++;
-                    return token.value;
-                }
-                
-                if (token.type === 'NUMBER') {
-                    pos++;
-                    return token.value;
-                }
-                
+                if (token.type === 'STRING') { pos++; return token.value; }
+                if (token.type === 'NUMBER') { pos++; return token.value; }
                 if (token.type === 'LITERAL') {
                     pos++;
-                    return token.value === 'true' ? true : 
-                           token.value === 'false' ? false : null;
+                    return token.value === 'true' ? true : token.value === 'false' ? false : null;
                 }
-                
-                if (token.type === 'LBRACKET' || token.type === 'ARRAY') {
-                    return parseArray();
-                }
+                if (token.type === 'LBRACKET' || token.type === 'ARRAY') return parseArray();
                 
                 throw new Error('无法解析的值: ' + JSON.stringify(token));
             }
@@ -724,7 +1093,6 @@ array(
                 let isIndexedArray = true;
                 let index = 0;
                 
-                // 跳过 'array' 关键字或 '['
                 if (tokens[pos]?.type === 'ARRAY') {
                     pos++;
                     if (tokens[pos]?.type === 'LPAREN') pos++;
@@ -732,42 +1100,27 @@ array(
                     pos++;
                 }
                 
-                while (pos < tokens.length && 
-                       tokens[pos]?.type !== 'RBRACKET' && 
-                       tokens[pos]?.type !== 'RPAREN') {
-                    
+                while (pos < tokens.length && tokens[pos]?.type !== 'RBRACKET' && tokens[pos]?.type !== 'RPAREN') {
                     let key = index;
-                    let value;
                     
-                    // 检查是否有键
                     if (pos + 1 < tokens.length && tokens[pos + 1]?.type === 'ARROW') {
                         key = parseValue();
-                        pos++; // 跳过 '=>'
+                        pos++;
                         isIndexedArray = false;
                     }
                     
-                    value = parseValue();
+                    const value = parseValue();
                     result[key] = value;
                     
                     if (isIndexedArray) index++;
-                    
-                    // 跳过逗号
-                    if (tokens[pos]?.type === 'COMMA') {
-                        pos++;
-                    }
+                    if (tokens[pos]?.type === 'COMMA') pos++;
                 }
                 
-                // 跳过结束符号
-                if (tokens[pos]?.type === 'RBRACKET' || tokens[pos]?.type === 'RPAREN') {
-                    pos++;
-                }
+                if (tokens[pos]?.type === 'RBRACKET' || tokens[pos]?.type === 'RPAREN') pos++;
                 
-                // 如果是纯索引数组，转换为数组
                 if (isIndexedArray) {
                     const arr = [];
-                    for (let i = 0; i < index; i++) {
-                        arr[i] = result[i];
-                    }
+                    for (let i = 0; i < index; i++) arr[i] = result[i];
                     return arr;
                 }
                 
@@ -776,30 +1129,14 @@ array(
             
             return parseValue();
         }
-        
-        // 备用解析器
-        function parsePHPArrayFallback(phpString) {
-            let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
-            cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
-            cleanString = cleanString.replace(/;$/, '');
-            cleanString = replaceArraySyntax(cleanString);
-            cleanString = replaceArrowSyntax(cleanString);
-            cleanString = replaceSingleQuotes(cleanString);
-            cleanString = replacePhpValues(cleanString);
-            cleanString = fixKeyFormat(cleanString);
-            return JSON.parse(cleanString);
-        }
 
-        // 转换为PHP格式 - 增强版
-        function convertToPHP(obj, indent = 0, isRoot = false) {
+        // 转换为PHP格式
+        function convertToPHP(obj, indent = 0) {
             const spaces = '    '.repeat(indent);
             const nextSpaces = '    '.repeat(indent + 1);
             
             if (Array.isArray(obj)) {
                 if (obj.length === 0) return '[]';
-                
-                // 检查是否为索引数组
-                const isIndexedArray = obj.every((item, index) => true);
                 
                 let result = '[\n';
                 obj.forEach((item, index) => {
@@ -813,22 +1150,17 @@ array(
                 const keys = Object.keys(obj);
                 if (keys.length === 0) return '[]';
                 
-                // 检查是否为纯数字索引的对象
                 const isNumericKeys = keys.every(key => /^\d+$/.test(key));
-                const isSequentialKeys = isNumericKeys && keys.length > 0 && 
-                    keys.map(Number).sort((a, b) => a - b).every((num, index) => num === index);
+                const isSequentialKeys = isNumericKeys && keys.map(Number).sort((a, b) => a - b).every((num, index) => num === index);
                 
                 let result = '[\n';
                 keys.forEach((key, index) => {
                     let quotedKey;
                     if (isNumericKeys && isSequentialKeys) {
-                        // 连续数字索引，可以省略键
                         quotedKey = '';
                     } else if (/^\d+$/.test(key)) {
-                        // 数字键
                         quotedKey = key + ' => ';
                     } else {
-                        // 字符串键，转义特殊字符
                         const escapedKey = key.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                         quotedKey = `'${escapedKey}' => `;
                     }
@@ -840,20 +1172,13 @@ array(
                 result += spaces + ']';
                 return result;
             } else if (typeof obj === 'string') {
-                // 更好的字符串转义处理
-                const escaped = obj
-                    .replace(/\\/g, '\\\\')  // 反斜杠
-                    .replace(/'/g, "\\'")    // 单引号
-                    .replace(/\n/g, '\\n')   // 换行符
-                    .replace(/\r/g, '\\r')   // 回车符
-                    .replace(/\t/g, '\\t');  // 制表符
+                const escaped = obj.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
                 return `'${escaped}'`;
             } else if (typeof obj === 'boolean') {
                 return obj ? 'true' : 'false';
             } else if (obj === null) {
                 return 'null';
             } else if (typeof obj === 'number') {
-                // 处理特殊数字值
                 if (isNaN(obj)) return 'NAN';
                 if (!isFinite(obj)) return obj > 0 ? 'INF' : '-INF';
                 return obj.toString();
@@ -862,6 +1187,547 @@ array(
             }
         }
 
+        // ==================== DDL解析功能 ====================
+        
+        function showDDLMessage(message, type = 'success') {
+            const errorDiv = document.getElementById('ddlErrorMsg');
+            const successDiv = document.getElementById('ddlSuccessMsg');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+            }
+            
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function parseDDL() {
+            const ddlInput = document.getElementById('ddlInput').value.trim();
+            if (!ddlInput) {
+                showDDLMessage('请输入DDL语句', 'error');
+                return;
+            }
+
+            try {
+                const result = parseDDLStatements(ddlInput);
+                renderDDLResult(result);
+                showDDLMessage('解析成功！');
+            } catch (error) {
+                console.error('DDL解析错误:', error);
+                showDDLMessage('解析失败：' + error.message, 'error');
+            }
+        }
+
+        function clearDDL() {
+            document.getElementById('ddlInput').value = '';
+            document.getElementById('ddlOutput').innerHTML = `
+                <div class="ddl-placeholder">
+                    <span>📊</span>
+                    <p>解析结果将显示在这里</p>
+                </div>
+            `;
+            document.getElementById('ddlErrorMsg').style.display = 'none';
+            document.getElementById('ddlSuccessMsg').style.display = 'none';
+        }
+
+        // 解析多条DDL语句
+        function parseDDLStatements(ddl) {
+            // 移除注释
+            ddl = ddl.replace(/--.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+            
+            const tables = {};
+            const standaloneIndexes = [];
+            
+            // 分割语句
+            const statements = ddl.split(';').map(s => s.trim()).filter(s => s.length > 0);
+            
+            for (const stmt of statements) {
+                // 解析 CREATE TABLE
+                if (/CREATE\s+TABLE/i.test(stmt)) {
+                    const tableResult = parseCreateTable(stmt);
+                    tables[tableResult.tableName.toLowerCase()] = tableResult;
+                }
+                // 解析 CREATE INDEX
+                else if (/CREATE\s+(UNIQUE\s+)?INDEX/i.test(stmt)) {
+                    const indexResult = parseCreateIndex(stmt);
+                    if (indexResult) {
+                        const tableName = indexResult.tableName.toLowerCase();
+                        if (tables[tableName]) {
+                            // 将索引添加到已有的表中
+                            tables[tableName].indexes.push(indexResult.index);
+                            // 更新字段的索引信息
+                            for (const field of tables[tableName].fields) {
+                                if (indexResult.index.columns.some(col => col.toLowerCase() === field.name.toLowerCase())) {
+                                    field.indexes.push({
+                                        name: indexResult.index.name,
+                                        type: indexResult.index.type,
+                                        isFirst: indexResult.index.columns[0].toLowerCase() === field.name.toLowerCase()
+                                    });
+                                }
+                            }
+                        } else {
+                            // 表不存在，记录为独立索引
+                            standaloneIndexes.push(indexResult);
+                        }
+                    }
+                }
+            }
+            
+            return {
+                tables: Object.values(tables),
+                standaloneIndexes
+            };
+        }
+
+        // 解析 CREATE TABLE 语句
+        function parseCreateTable(ddl) {
+            // 提取表名
+            const tableNameMatch = ddl.match(/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?[`"']?(\w+)[`"']?/i);
+            if (!tableNameMatch) {
+                throw new Error('无法识别CREATE TABLE语句');
+            }
+            const tableName = tableNameMatch[1];
+
+            // 提取表注释
+            const tableCommentMatch = ddl.match(/\)\s*[^;]*COMMENT\s*=?\s*['"]([^'"]+)['"]/i);
+            const tableComment = tableCommentMatch ? tableCommentMatch[1] : '';
+
+            // 提取括号内的内容
+            const contentMatch = ddl.match(/CREATE\s+TABLE[^(]*\(([\s\S]+)\)[^)]*$/i);
+            if (!contentMatch) {
+                throw new Error('无法解析表定义内容');
+            }
+            
+            const content = contentMatch[1];
+            const definitions = splitDefinitions(content);
+            
+            const fields = [];
+            const indexes = [];
+            
+            for (const def of definitions) {
+                const trimmedDef = def.trim();
+                if (!trimmedDef) continue;
+                
+                if (/^(PRIMARY\s+KEY|UNIQUE\s+KEY|UNIQUE\s+INDEX|KEY|INDEX|FULLTEXT\s+KEY|FULLTEXT\s+INDEX|SPATIAL\s+KEY|SPATIAL\s+INDEX|CONSTRAINT)/i.test(trimmedDef)) {
+                    const indexInfo = parseInlineIndex(trimmedDef);
+                    if (indexInfo) indexes.push(indexInfo);
+                } else if (/^[`"']?\w+[`"']?\s+/i.test(trimmedDef)) {
+                    const fieldInfo = parseField(trimmedDef);
+                    if (fieldInfo) fields.push(fieldInfo);
+                }
+            }
+            
+            // 为字段添加索引信息
+            for (const field of fields) {
+                field.indexes = [];
+                for (const index of indexes) {
+                    if (index.columns.some(col => col.toLowerCase() === field.name.toLowerCase())) {
+                        field.indexes.push({
+                            name: index.name,
+                            type: index.type,
+                            isFirst: index.columns[0].toLowerCase() === field.name.toLowerCase()
+                        });
+                    }
+                }
+            }
+            
+            return { tableName, tableComment, fields, indexes };
+        }
+
+        // 解析 CREATE INDEX 语句
+        function parseCreateIndex(stmt) {
+            // CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX index_name ON table_name (column_list)
+            const match = stmt.match(/CREATE\s+(UNIQUE\s+|FULLTEXT\s+|SPATIAL\s+)?INDEX\s+[`"']?(\w+)[`"']?\s+ON\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
+            
+            if (!match) return null;
+            
+            const typeStr = (match[1] || '').trim().toUpperCase();
+            let type = 'INDEX';
+            if (typeStr === 'UNIQUE') type = 'UNIQUE';
+            else if (typeStr === 'FULLTEXT') type = 'FULLTEXT';
+            else if (typeStr === 'SPATIAL') type = 'SPATIAL';
+            
+            const name = match[2];
+            const tableName = match[3];
+            const columns = parseIndexColumns(match[4]);
+            
+            return {
+                tableName,
+                index: { type, name, columns }
+            };
+        }
+
+        // 分割定义（处理括号嵌套）
+        function splitDefinitions(content) {
+            const definitions = [];
+            let current = '';
+            let depth = 0;
+            let inString = false;
+            let stringChar = '';
+            
+            for (let i = 0; i < content.length; i++) {
+                const char = content[i];
+                
+                if (inString) {
+                    current += char;
+                    if (char === stringChar && content[i - 1] !== '\\') {
+                        inString = false;
+                    }
+                    continue;
+                }
+                
+                if (char === "'" || char === '"' || char === '`') {
+                    inString = true;
+                    stringChar = char;
+                    current += char;
+                    continue;
+                }
+                
+                if (char === '(') { depth++; current += char; continue; }
+                if (char === ')') { depth--; current += char; continue; }
+                
+                if (char === ',' && depth === 0) {
+                    definitions.push(current.trim());
+                    current = '';
+                    continue;
+                }
+                
+                current += char;
+            }
+            
+            if (current.trim()) definitions.push(current.trim());
+            return definitions;
+        }
+
+        // 解析字段
+        function parseField(fieldDef) {
+            const nameMatch = fieldDef.match(/^[`"']?(\w+)[`"']?\s+(.+)$/i);
+            if (!nameMatch) return null;
+            
+            const name = nameMatch[1];
+            const rest = nameMatch[2];
+            
+            const typeMatch = rest.match(/^(\w+(?:\s*\([^)]+\))?(?:\s+unsigned)?(?:\s+zerofill)?)/i);
+            const type = typeMatch ? typeMatch[1].trim() : 'UNKNOWN';
+            
+            const nullable = !/\bNOT\s+NULL\b/i.test(rest);
+            
+            let defaultValue = null;
+            const defaultMatch = rest.match(/DEFAULT\s+('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|[\w()]+)/i);
+            if (defaultMatch) {
+                defaultValue = defaultMatch[1].replace(/^['"]|['"]$/g, '');
+            }
+            
+            const autoIncrement = /\bAUTO_INCREMENT\b/i.test(rest);
+            
+            let comment = '';
+            const commentMatch = rest.match(/COMMENT\s+['"]([^'"]*)['"]/i);
+            if (commentMatch) comment = commentMatch[1];
+            
+            const isPrimaryKey = /\bPRIMARY\s+KEY\b/i.test(rest);
+            
+            return { name, type, nullable, defaultValue, autoIncrement, comment, isPrimaryKey, indexes: [] };
+        }
+
+        // 解析内联索引（CREATE TABLE 内的索引定义）
+        function parseInlineIndex(indexDef) {
+            let type = 'INDEX';
+            let name = '';
+            let columns = [];
+            
+            if (/^PRIMARY\s+KEY/i.test(indexDef)) {
+                type = 'PRIMARY';
+                name = 'PRIMARY';
+                const colMatch = indexDef.match(/\(([^)]+)\)/);
+                if (colMatch) columns = parseIndexColumns(colMatch[1]);
+            }
+            else if (/^UNIQUE\s+(KEY|INDEX)/i.test(indexDef)) {
+                type = 'UNIQUE';
+                const nameMatch = indexDef.match(/^UNIQUE\s+(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
+                if (nameMatch) {
+                    name = nameMatch[1];
+                    columns = parseIndexColumns(nameMatch[2]);
+                }
+            }
+            else if (/^FULLTEXT\s+(KEY|INDEX)/i.test(indexDef)) {
+                type = 'FULLTEXT';
+                const nameMatch = indexDef.match(/^FULLTEXT\s+(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
+                if (nameMatch) {
+                    name = nameMatch[1];
+                    columns = parseIndexColumns(nameMatch[2]);
+                }
+            }
+            else if (/^(KEY|INDEX)/i.test(indexDef)) {
+                type = 'INDEX';
+                const nameMatch = indexDef.match(/^(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
+                if (nameMatch) {
+                    name = nameMatch[1];
+                    columns = parseIndexColumns(nameMatch[2]);
+                }
+            }
+            
+            if (columns.length === 0) return null;
+            return { type, name, columns };
+        }
+
+        // 解析索引列
+        function parseIndexColumns(columnsStr) {
+            return columnsStr.split(',').map(col => {
+                const match = col.trim().match(/[`"']?(\w+)[`"']?/);
+                return match ? match[1] : '';
+            }).filter(Boolean);
+        }
+
+        // 渲染DDL结果
+        function renderDDLResult(result) {
+            const output = document.getElementById('ddlOutput');
+            let html = '';
+            
+            // 渲染每个表
+            for (const table of result.tables) {
+                html += renderTableResult(table);
+            }
+            
+            // 渲染独立索引
+            if (result.standaloneIndexes.length > 0) {
+                html += `
+                    <div class="index-section">
+                        <h5>🔗 独立索引（未找到对应表）</h5>
+                        <div class="index-list">
+                `;
+                
+                for (const item of result.standaloneIndexes) {
+                    const badgeClass = getIndexBadgeClass(item.index.type);
+                    html += `
+                        <div class="index-item">
+                            <span class="index-badge ${badgeClass}">${getIndexTypeLabel(item.index.type)}</span>
+                            <span class="index-name">${escapeHtml(item.index.name)}</span>
+                            <span class="index-table">ON ${escapeHtml(item.tableName)}</span>
+                            <span class="index-columns">(${item.index.columns.map(c => escapeHtml(c)).join(', ')})</span>
+                        </div>
+                    `;
+                }
+                
+                html += '</div></div>';
+            }
+            
+            if (!html) {
+                html = `
+                    <div class="ddl-placeholder">
+                        <span>⚠️</span>
+                        <p>未能解析出有效的DDL语句</p>
+                    </div>
+                `;
+            }
+            
+            output.innerHTML = html;
+        }
+
+        // 渲染单个表的结果
+        function renderTableResult(table) {
+            let html = `
+                <div class="table-info">
+                    <h4>
+                        📋 表名: <span class="table-name">${escapeHtml(table.tableName)}</span>
+                        ${table.tableComment ? `<span class="table-comment">（${escapeHtml(table.tableComment)}）</span>` : ''}
+                    </h4>
+                </div>
+                
+                <table class="ddl-table">
+                    <thead>
+                        <tr>
+                            <th>字段名</th>
+                            <th>类型</th>
+                            <th>允许NULL</th>
+                            <th>默认值</th>
+                            <th>索引</th>
+                            <th>注释</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            for (const field of table.fields) {
+                const indexBadges = renderIndexBadges(field);
+                
+                html += `
+                    <tr>
+                        <td class="field-name">${escapeHtml(field.name)}${field.autoIncrement ? ' <small style="color:#999">(AI)</small>' : ''}</td>
+                        <td class="field-type">${escapeHtml(field.type)}</td>
+                        <td class="field-nullable ${field.nullable ? 'nullable-yes' : 'nullable-no'}">${field.nullable ? '✓' : '✗'}</td>
+                        <td class="field-default">${field.defaultValue !== null ? escapeHtml(field.defaultValue) : '<span style="color:#999">-</span>'}</td>
+                        <td class="index-badges">${indexBadges || '<span style="color:#999">-</span>'}</td>
+                        <td class="field-comment">${escapeHtml(field.comment) || '<span style="color:#999">-</span>'}</td>
+                    </tr>
+                `;
+            }
+            
+            html += '</tbody></table>';
+            
+            // 添加索引列表
+            if (table.indexes.length > 0) {
+                html += `
+                    <div class="index-section">
+                        <h5>🔑 索引列表</h5>
+                        <div class="index-list">
+                `;
+                
+                for (const index of table.indexes) {
+                    const badgeClass = getIndexBadgeClass(index.type);
+                    html += `
+                        <div class="index-item">
+                            <span class="index-badge ${badgeClass}">${getIndexTypeLabel(index.type)}</span>
+                            <span class="index-name">${escapeHtml(index.name)}</span>
+                            <span class="index-columns">(${index.columns.map(c => escapeHtml(c)).join(', ')})</span>
+                        </div>
+                    `;
+                }
+                
+                html += '</div></div>';
+            }
+            
+            return html;
+        }
+
+        // 渲染索引徽章
+        function renderIndexBadges(field) {
+            if (field.indexes.length === 0 && !field.isPrimaryKey) return '';
+            
+            let badges = '';
+            
+            if (field.isPrimaryKey) {
+                badges += `<span class="index-badge index-primary">🔑 主键</span>`;
+            }
+            
+            for (const idx of field.indexes) {
+                if (idx.type === 'PRIMARY' && field.isPrimaryKey) continue;
+                
+                const badgeClass = getIndexBadgeClass(idx.type);
+                const label = getIndexTypeLabel(idx.type);
+                const prefix = idx.isFirst ? '' : '↳ ';
+                
+                badges += `<span class="index-badge ${badgeClass}" title="${escapeHtml(idx.name)}">${prefix}${label}</span>`;
+            }
+            
+            return badges;
+        }
+
+        function getIndexBadgeClass(type) {
+            switch (type) {
+                case 'PRIMARY': return 'index-primary';
+                case 'UNIQUE': return 'index-unique';
+                case 'FULLTEXT': return 'index-fulltext';
+                default: return 'index-normal';
+            }
+        }
+
+        function getIndexTypeLabel(type) {
+            switch (type) {
+                case 'PRIMARY': return '🔑 主键';
+                case 'UNIQUE': return '🎯 唯一';
+                case 'FULLTEXT': return '📝 全文';
+                default: return '📇 索引';
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // 复制为Markdown表格
+        function copyTableAsMarkdown() {
+            const ddlInput = document.getElementById('ddlInput').value.trim();
+            if (!ddlInput) {
+                showDDLMessage('请先输入并解析DDL语句', 'error');
+                return;
+            }
+
+            try {
+                const result = parseDDLStatements(ddlInput);
+                const markdown = generateMarkdownTable(result);
+                
+                navigator.clipboard.writeText(markdown).then(() => {
+                    showDDLMessage('已复制Markdown到剪贴板！');
+                }).catch(err => {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = markdown;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showDDLMessage('已复制Markdown到剪贴板！');
+                });
+            } catch (error) {
+                showDDLMessage('复制失败：' + error.message, 'error');
+            }
+        }
+
+        function generateMarkdownTable(result) {
+            let md = '';
+            
+            for (const table of result.tables) {
+                md += `## 表名: ${table.tableName}`;
+                if (table.tableComment) md += ` (${table.tableComment})`;
+                md += '\n\n';
+                
+                md += '| 字段名 | 类型 | 允许NULL | 默认值 | 索引 | 注释 |\n';
+                md += '|--------|------|----------|--------|------|------|\n';
+                
+                for (const field of table.fields) {
+                    const indexLabels = [];
+                    if (field.isPrimaryKey) indexLabels.push('主键');
+                    for (const idx of field.indexes) {
+                        if (idx.type === 'PRIMARY' && field.isPrimaryKey) continue;
+                        indexLabels.push(`${getIndexTypeText(idx.type)}(${idx.name})`);
+                    }
+                    
+                    md += `| ${field.name}${field.autoIncrement ? ' (AI)' : ''} `;
+                    md += `| ${field.type} `;
+                    md += `| ${field.nullable ? '是' : '否'} `;
+                    md += `| ${field.defaultValue !== null ? field.defaultValue : '-'} `;
+                    md += `| ${indexLabels.length > 0 ? indexLabels.join(', ') : '-'} `;
+                    md += `| ${field.comment || '-'} |\n`;
+                }
+                
+                if (table.indexes.length > 0) {
+                    md += '\n### 索引列表\n\n';
+                    md += '| 索引名 | 类型 | 字段 |\n';
+                    md += '|--------|------|------|\n';
+                    
+                    for (const index of table.indexes) {
+                        md += `| ${index.name} | ${getIndexTypeText(index.type)} | ${index.columns.join(', ')} |\n`;
+                    }
+                }
+                
+                md += '\n';
+            }
+            
+            return md;
+        }
+
+        function getIndexTypeText(type) {
+            switch (type) {
+                case 'PRIMARY': return '主键';
+                case 'UNIQUE': return '唯一索引';
+                case 'FULLTEXT': return '全文索引';
+                default: return '普通索引';
+            }
+        }
     </script>
 </body>
 </html>
