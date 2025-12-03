@@ -1,0 +1,420 @@
+@import "tailwindcss";
+
+/* ========================================
+ * Cursor IDE Dark Theme - VS Code Style
+ * ======================================== */
+
+/* 深色主题变量 (默认) - Cursor/VS Code Dark Modern */
+:root {
+  /* 背景色 - IDE 风格分层 */
+  --bg-primary: #1e1e1e;      /* 主编辑器背景 */
+  --bg-secondary: #181818;    /* 侧边栏背景 */
+  --bg-tertiary: #252526;     /* 面板背景 */
+  --bg-elevated: #252526;     /* 悬浮面板 */
+  --bg-hover: #2a2d2e;        /* 悬停状态 */
+  --bg-active: #37373d;       /* 活跃/选中状态 */
+  --bg-input: #3c3c3c;        /* 输入框背景 */
+  
+  /* 前景色/文字 */
+  --fg-primary: #e6e6e6;      /* 主文本 */
+  --fg-secondary: #858585;    /* 次要文本/注释 */
+  --fg-muted: #6e6e6e;        /* 禁用/占位符 */
+  --fg-accent: #3794ff;       /* 强调文本 */
+  
+  /* 边框 - 微妙细线 */
+  --border-default: #2b2b2b;
+  --border-subtle: #252526;
+  --border-active: #3794ff;
+  
+  /* 强调色 - Cursor Blue */
+  --accent-primary: #3794ff;
+  --accent-hover: #2d7fd8;
+  --accent-start: #3794ff;
+  --accent-end: #3794ff;
+  
+  /* 状态色 */
+  --success: #89d185;
+  --success-bg: rgba(137, 209, 133, 0.15);
+  --error: #f14c4c;
+  --error-bg: rgba(241, 76, 76, 0.15);
+  --warning: #cca700;
+  --warning-bg: rgba(204, 167, 0, 0.15);
+  
+  /* 语法高亮色 */
+  --syntax-keyword: #569cd6;
+  --syntax-string: #ce9178;
+  --syntax-number: #b5cea8;
+  --syntax-comment: #6a9955;
+  --syntax-function: #dcdcaa;
+  --syntax-variable: #9cdcfe;
+  
+  /* 阴影 - IDE 风格无阴影 */
+  --shadow-sm: none;
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+  
+  /* 圆角 - IDE 风格极小圆角 */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+}
+
+/* 浅色主题变量 - VS Code Light */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f3f3;
+  --bg-tertiary: #f8f8f8;
+  --bg-elevated: #ffffff;
+  --bg-hover: #e8e8e8;
+  --bg-active: #d4d4d4;
+  --bg-input: #ffffff;
+  
+  --fg-primary: #333333;
+  --fg-secondary: #616161;
+  --fg-muted: #a0a0a0;
+  --fg-accent: #0066bf;
+  
+  --border-default: #e5e5e5;
+  --border-subtle: #f0f0f0;
+  --border-active: #0066bf;
+  
+  --accent-primary: #0066bf;
+  --accent-hover: #005ba4;
+  --accent-start: #0066bf;
+  --accent-end: #0066bf;
+  
+  --shadow-sm: none;
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================
+ * 全局样式
+ * ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--fg-primary);
+  line-height: 1.4;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* 代码字体 - JetBrains Mono */
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  font-feature-settings: 'liga' on, 'calt' on;
+}
+
+/* IDE 风格滚动条 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(121, 121, 121, 0.4);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(121, 121, 121, 0.6);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* 选中文字样式 */
+::selection {
+  background: rgba(55, 148, 255, 0.4);
+  color: inherit;
+}
+
+/* 焦点样式 - IDE 风格 */
+:focus-visible {
+  outline: 1px solid var(--accent-primary);
+  outline-offset: -1px;
+}
+
+/* 过渡动画 */
+.transition-theme {
+  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+}
+
+/* Toast 滑入动画 */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.2s ease-out;
+}
+
+/* ========================================
+ * IDE 特定样式
+ * ======================================== */
+
+/* Activity Bar 图标样式 */
+.activity-bar-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-secondary);
+  cursor: pointer;
+  position: relative;
+}
+
+.activity-bar-icon:hover {
+  color: var(--fg-primary);
+}
+
+.activity-bar-icon.active {
+  color: var(--fg-primary);
+}
+
+.activity-bar-icon.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent-primary);
+}
+
+/* Explorer 树形结构 */
+.tree-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px 4px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--fg-primary);
+}
+
+.tree-item:hover {
+  background: var(--bg-hover);
+}
+
+.tree-item.active {
+  background: var(--bg-active);
+}
+
+.tree-item.selected {
+  background: var(--bg-hover);
+  border-left: 2px solid var(--accent-primary);
+  padding-left: 14px;
+}
+
+/* 编辑器标签栏 */
+.editor-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--fg-secondary);
+  background: var(--bg-tertiary);
+  border-right: 1px solid var(--border-default);
+  cursor: pointer;
+}
+
+.editor-tab:hover {
+  color: var(--fg-primary);
+}
+
+.editor-tab.active {
+  color: var(--fg-primary);
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--bg-primary);
+  margin-bottom: -1px;
+}
+
+/* 行号槽 */
+.line-numbers {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  text-align: right;
+  color: var(--fg-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 20px;
+  user-select: none;
+  min-width: 50px;
+  padding-right: 12px;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-default);
+}
+
+/* IDE 表格样式 */
+.ide-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.ide-table th {
+  text-align: left;
+  padding: 6px 12px;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--fg-secondary);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-default);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.ide-table td {
+  padding: 4px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+
+.ide-table tr:hover td {
+  background: var(--bg-hover);
+}
+
+/* IDE 徽章 */
+.ide-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.ide-badge-pk {
+  background: rgba(204, 167, 0, 0.2);
+  color: #cca700;
+  border: 1px solid rgba(204, 167, 0, 0.4);
+}
+
+.ide-badge-uq {
+  background: rgba(55, 148, 255, 0.2);
+  color: #3794ff;
+  border: 1px solid rgba(55, 148, 255, 0.4);
+}
+
+.ide-badge-idx {
+  background: rgba(134, 134, 134, 0.2);
+  color: #868686;
+  border: 1px solid rgba(134, 134, 134, 0.4);
+}
+
+.ide-badge-null {
+  background: rgba(134, 134, 134, 0.15);
+  color: #868686;
+}
+
+.ide-badge-required {
+  background: rgba(241, 76, 76, 0.15);
+  color: #f14c4c;
+}
+
+/* Action Bar 按钮 */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--fg-primary);
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  background: var(--bg-hover);
+}
+
+.action-btn-primary {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.action-btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+/* 面板标题栏 */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: 35px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-default);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--fg-secondary);
+}
+
+/* 分割线 */
+.panel-divider {
+  height: 1px;
+  background: var(--border-default);
+}
+
+/* 状态栏 */
+.status-bar {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  background: var(--accent-primary);
+  color: white;
+  font-size: 11px;
+}
+
+.status-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+}

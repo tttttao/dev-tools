@@ -44,16 +44,41 @@ function generateId(): string {
 }
 
 /**
+ * VS Code 风格图标组件
+ */
+const CheckIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <polyline points="20,6 9,17 4,12" />
+  </svg>
+)
+
+const ErrorIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="15" y1="9" x2="9" y2="15" />
+    <line x1="9" y1="9" x2="15" y2="15" />
+  </svg>
+)
+
+const InfoIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="16" x2="12" y2="12" />
+    <line x1="12" y1="8" x2="12.01" y2="8" />
+  </svg>
+)
+
+const CloseIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+)
+
+/**
  * ToastProvider 组件
  * 
  * 提供全局消息提示功能的上下文提供者。
- * 
- * @example
- * ```tsx
- * <ToastProvider>
- *   <App />
- * </ToastProvider>
- * ```
  */
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
@@ -91,13 +116,20 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 }
 
 /**
- * Toast 容器组件
+ * Toast 容器组件 - VS Code 通知风格
  */
 function ToastContainer({ toasts, onRemove }: { toasts: Toast[]; onRemove: (id: string) => void }) {
   if (toasts.length === 0) return null
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+    <div 
+      className="fixed z-50 flex flex-col gap-2"
+      style={{ 
+        bottom: '36px', // 状态栏上方
+        right: '16px',
+        maxWidth: '320px' 
+      }}
+    >
       {toasts.map(toast => (
         <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
       ))}
@@ -106,49 +138,93 @@ function ToastContainer({ toasts, onRemove }: { toasts: Toast[]; onRemove: (id: 
 }
 
 /**
- * 单个 Toast 组件
+ * 单个 Toast 组件 - VS Code 通知风格
  */
 function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
   // 类型对应的样式
-  const typeStyles: Record<ToastType, string> = {
-    success: 'bg-[var(--success-bg)] border-[var(--success)] text-[var(--success)]',
-    error: 'bg-[var(--error-bg)] border-[var(--error)] text-[var(--error)]',
-    info: 'bg-[var(--bg-elevated)] border-[var(--border-default)] text-[var(--fg-primary)]',
+  const typeConfig: Record<ToastType, { bg: string; border: string; iconColor: string; icon: JSX.Element }> = {
+    success: {
+      bg: '#1e1e1e',
+      border: '#89d185',
+      iconColor: '#89d185',
+      icon: <CheckIcon />
+    },
+    error: {
+      bg: '#1e1e1e',
+      border: '#f14c4c',
+      iconColor: '#f14c4c',
+      icon: <ErrorIcon />
+    },
+    info: {
+      bg: '#1e1e1e',
+      border: '#3794ff',
+      iconColor: '#3794ff',
+      icon: <InfoIcon />
+    },
   }
 
-  // 类型对应的图标
-  const typeIcons: Record<ToastType, string> = {
-    success: '✓',
-    error: '✕',
-    info: 'ℹ',
-  }
+  const config = typeConfig[toast.type]
 
   return (
     <div
-      className={`
-        flex items-center gap-3
-        px-4 py-3
-        min-w-[280px] max-w-[400px]
-        border rounded-[var(--radius-lg)]
-        shadow-[var(--shadow-lg)]
-        animate-slide-in
-        ${typeStyles[toast.type]}
-      `}
+      className="animate-slide-in"
+      style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '10px',
+        padding: '10px 12px',
+        background: config.bg,
+        borderLeft: `3px solid ${config.border}`,
+        borderRadius: '0',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
+        fontSize: '12px',
+        color: '#e6e6e6',
+        minWidth: '280px',
+      }}
       role="alert"
     >
       {/* 图标 */}
-      <span className="text-lg font-bold">{typeIcons[toast.type]}</span>
+      <span 
+        style={{ 
+          color: config.iconColor,
+          flexShrink: 0,
+          marginTop: '1px'
+        }}
+      >
+        {config.icon}
+      </span>
       
       {/* 消息 */}
-      <p className="flex-1 text-sm">{toast.message}</p>
+      <p style={{ flex: 1, margin: 0, lineHeight: '1.4' }}>
+        {toast.message}
+      </p>
       
       {/* 关闭按钮 */}
       <button
         onClick={() => onRemove(toast.id)}
-        className="text-current opacity-60 hover:opacity-100 transition-opacity"
+        style={{
+          background: 'transparent',
+          border: 'none',
+          padding: '2px',
+          cursor: 'pointer',
+          color: '#858585',
+          flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '3px',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = '#2a2d2e'
+          e.currentTarget.style.color = '#e6e6e6'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'transparent'
+          e.currentTarget.style.color = '#858585'
+        }}
         aria-label="关闭"
       >
-        ✕
+        <CloseIcon />
       </button>
     </div>
   )
@@ -176,4 +252,3 @@ export function useToast(): ToastContextValue {
   
   return context
 }
-
