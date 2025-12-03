@@ -30,6 +30,8 @@ export function parsePHPArray(phpString: string): PHPValue {
     .replace(/<\?php|<\?|\?>/g, '') // 移除 PHP 标签
     .trim()
   
+  // 移除 return 关键字
+  cleanString = cleanString.replace(/^return\s+/, '')
   // 移除变量赋值
   cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '')
   // 移除末尾分号
@@ -48,7 +50,7 @@ export function parsePHPArray(phpString: string): PHPValue {
  * 智能 PHP 数组解析器
  * 使用词法分析和语法解析
  */
-function smartParsePHPArray(phpString: string): PHPValue {
+export function smartParsePHPArray(phpString: string): PHPValue {
   const tokens = tokenize(phpString)
   return parseTokens(tokens)
 }
@@ -268,7 +270,7 @@ function parseTokens(tokens: Token[]): PHPValue {
  * 简单 PHP 数组解析器 (降级方案)
  * 通过字符串替换转换为 JSON 格式
  */
-function simpleParsePHPArray(phpString: string): PHPValue {
+export function simpleParsePHPArray(phpString: string): PHPValue {
   let cleanString = phpString
 
   // 替换 array() 为 []
@@ -286,7 +288,79 @@ function simpleParsePHPArray(phpString: string): PHPValue {
   // 修复键格式
   cleanString = fixKeyFormat(cleanString)
 
+  // 转换关联数组的括号 [] -> {}
+  cleanString = convertBrackets(cleanString)
+
   return JSON.parse(cleanString)
+}
+
+/**
+ * 转换关联数组的括号 [] -> {}
+ *
+ * 只有当括号内包含键值对 (:) 时才进行转换
+ */
+function convertBrackets(str: string): string {
+  const stack: { index: number; containsColon: boolean }[] = []
+  const pairs: { open: number; close: number; containsColon: boolean }[] = []
+
+  let inString = false
+  let stringChar = ''
+  let escaped = false
+
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i]
+
+    if (escaped) {
+      escaped = false
+      continue
+    }
+
+    if (char === '\\') {
+      escaped = true
+      continue
+    }
+
+    if (char === '"' || char === "'") {
+      if (!inString) {
+        inString = true
+        stringChar = char
+      } else if (char === stringChar) {
+        inString = false
+      }
+      continue
+    }
+
+    if (inString) continue
+
+    if (char === '[') {
+      stack.push({ index: i, containsColon: false })
+    } else if (char === ']') {
+      const top = stack.pop()
+      if (top) {
+        pairs.push({ open: top.index, close: i, containsColon: top.containsColon })
+        // 如果当前块包含冒号，那么父块也相当于"包含"了这个复杂结构（虽然不一定是冒号，但这里我们只关心当前层级）
+        // 其实不需要传递给父级，因为父级只关心它直接包含的元素是否是 key: value。
+        // 但是嵌套的对象 {"a": {"b": 1}} 在父级看来是 "key": value，所以父级肯定有冒号。
+      }
+    } else if (char === ':') {
+      if (stack.length > 0) {
+        stack[stack.length - 1].containsColon = true
+      }
+    }
+  }
+
+  // 从后往前替换，这样不会影响索引
+  let result = str.split('')
+  pairs.sort((a, b) => b.open - a.open)
+
+  for (const pair of pairs) {
+    if (pair.containsColon) {
+      result[pair.open] = '{'
+      result[pair.close] = '}'
+    }
+  }
+
+  return result.join('')
 }
 
 /**
