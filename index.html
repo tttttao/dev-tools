@@ -540,6 +540,26 @@
             font-size: 12px;
         }
 
+        .index-item-warning {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+        }
+
+        .index-column-missing {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .index-warning {
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: auto;
+            padding: 2px 8px;
+            background: #fef2f2;
+            border-radius: 4px;
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .nav-container {
@@ -567,7 +587,7 @@
             .ddl-container {
                 grid-template-columns: 1fr;
             }
-
+            
             .home-header h1 {
                 font-size: 1.8rem;
             }
@@ -575,19 +595,19 @@
             .tools-grid {
                 grid-template-columns: 1fr;
             }
-
+            
             .buttons {
                 flex-direction: column;
             }
-
+            
             .btn {
                 width: 100%;
             }
-
+            
             .ddl-table {
                 font-size: 11px;
             }
-
+            
             .ddl-table th,
             .ddl-table td {
                 padding: 8px 10px;
@@ -621,15 +641,15 @@
 
     <!-- 主内容区域 -->
     <main class="main-content">
-        <div class="container">
+    <div class="container">
             <!-- 首页 -->
             <div id="page-home" class="tool-page active">
                 <div class="home-header">
-                    <h1>🛠️ 开发工具箱</h1>
+            <h1>🛠️ 开发工具箱</h1>
                     <p>实用的开发小工具集合，提升你的开发效率</p>
-                </div>
+        </div>
 
-                <div class="tools-grid">
+        <div class="tools-grid">
                     <div class="tool-card-home" onclick="showPage('php-json')">
                         <div class="card-icon">🔄</div>
                         <h3>PHP数组 ⇄ JSON 转换器</h3>
@@ -646,16 +666,16 @@
 
             <!-- PHP/JSON 转换器 -->
             <div id="page-php-json" class="tool-page">
-                <div class="tool-card">
+            <div class="tool-card">
                     <div class="tool-header">
                         <div class="icon">🔄</div>
                         <h2>PHP数组 ⇄ JSON 转换器</h2>
-                    </div>
+                </div>
 
-                    <div class="converter-container">
-                        <div class="converter-section">
-                            <h3>PHP数组格式</h3>
-                            <textarea id="phpInput" placeholder="请输入PHP数组格式，例如：
+                <div class="converter-container">
+                    <div class="converter-section">
+                        <h3>PHP数组格式</h3>
+                        <textarea id="phpInput" placeholder="请输入PHP数组格式，例如：
 array(
     'name' => '张三',
     'age' => 25,
@@ -668,31 +688,31 @@ array(
     'age' => 25,
     'skills' => ['PHP', 'JavaScript', 'Python']
 ]"></textarea>
-                        </div>
+                    </div>
 
-                        <div class="converter-section">
-                            <h3>JSON格式</h3>
+                    <div class="converter-section">
+                        <h3>JSON格式</h3>
                             <textarea id="jsonInput" placeholder='请输入JSON格式，例如：
 {
     "name": "张三",
     "age": 25,
     "skills": ["PHP", "JavaScript", "Python"]
 }'></textarea>
-                        </div>
                     </div>
+                </div>
 
-                    <div class="control-section">
-                        <div class="buttons">
-                            <button class="btn btn-primary" onclick="phpToJson()">PHP → JSON</button>
-                            <button class="btn btn-primary" onclick="jsonToPhp()">JSON → PHP</button>
+                <div class="control-section">
+                    <div class="buttons">
+                        <button class="btn btn-primary" onclick="phpToJson()">PHP → JSON</button>
+                        <button class="btn btn-primary" onclick="jsonToPhp()">JSON → PHP</button>
                             <button class="btn btn-secondary" onclick="clearPhpJson()">清空</button>
-                        </div>
+                    </div>
 
                         <div class="message error" id="phpJsonErrorMsg"></div>
                         <div class="message success" id="phpJsonSuccessMsg"></div>
-                    </div>
                 </div>
             </div>
+        </div>
 
             <!-- DDL 解析器 -->
             <div id="page-ddl-parser" class="tool-page">
@@ -700,7 +720,7 @@ array(
                     <div class="tool-header">
                         <div class="icon">📋</div>
                         <h2>DDL 解析器</h2>
-                    </div>
+    </div>
 
                     <div class="ddl-container">
                         <div class="ddl-input-section">
@@ -844,15 +864,15 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
 
         // PHP数组解析器
         function parsePHPArray(phpString) {
-            let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
-            cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
-            cleanString = cleanString.replace(/;$/, '');
-            cleanString = replaceArraySyntax(cleanString);
-            cleanString = replaceArrowSyntax(cleanString);
-            cleanString = replaceSingleQuotes(cleanString);
-            cleanString = replacePhpValues(cleanString);
-            cleanString = fixKeyFormat(cleanString);
-            return JSON.parse(cleanString);
+                let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+                cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
+                cleanString = cleanString.replace(/;$/, '');
+                cleanString = replaceArraySyntax(cleanString);
+                cleanString = replaceArrowSyntax(cleanString);
+                cleanString = replaceSingleQuotes(cleanString);
+                cleanString = replacePhpValues(cleanString);
+                cleanString = fixKeyFormat(cleanString);
+                return JSON.parse(cleanString);
         }
         
         function replaceArraySyntax(str) {
@@ -988,11 +1008,11 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
         
         // 智能PHP数组解析器
         function smartParsePHPArray(phpString) {
-            let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
-            cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
-            cleanString = cleanString.replace(/;$/, '');
-            
-            const tokens = tokenize(cleanString);
+                let cleanString = phpString.replace(/<\?php|<\?|\?>/g, '').trim();
+                cleanString = cleanString.replace(/^\$\w+\s*=\s*/, '');
+                cleanString = cleanString.replace(/;$/, '');
+                
+                const tokens = tokenize(cleanString);
             return parseTokens(tokens);
         }
         
@@ -1129,7 +1149,7 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
             
             return parseValue();
         }
-
+        
         // 转换为PHP格式
         function convertToPHP(obj, indent = 0) {
             const spaces = '    '.repeat(indent);
@@ -1262,10 +1282,22 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
                     if (indexResult) {
                         const tableName = indexResult.tableName.toLowerCase();
                         if (tables[tableName]) {
+                            const table = tables[tableName];
+                            const fieldNames = new Set(table.fields.map(f => f.name.toLowerCase()));
+                            
+                            // 检查索引字段是否存在
+                            indexResult.index.missingColumns = [];
+                            for (const col of indexResult.index.columns) {
+                                if (!fieldNames.has(col.toLowerCase())) {
+                                    indexResult.index.missingColumns.push(col);
+                                }
+                            }
+                            
                             // 将索引添加到已有的表中
-                            tables[tableName].indexes.push(indexResult.index);
+                            table.indexes.push(indexResult.index);
+                            
                             // 更新字段的索引信息
-                            for (const field of tables[tableName].fields) {
+                            for (const field of table.fields) {
                                 if (indexResult.index.columns.some(col => col.toLowerCase() === field.name.toLowerCase())) {
                                     field.indexes.push({
                                         name: indexResult.index.name,
@@ -1326,7 +1358,10 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
                 }
             }
             
-            // 为字段添加索引信息
+            // 获取所有字段名（小写）
+            const fieldNames = new Set(fields.map(f => f.name.toLowerCase()));
+            
+            // 为字段添加索引信息，并检查索引字段是否存在
             for (const field of fields) {
                 field.indexes = [];
                 for (const index of indexes) {
@@ -1336,6 +1371,16 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
                             type: index.type,
                             isFirst: index.columns[0].toLowerCase() === field.name.toLowerCase()
                         });
+                    }
+                }
+            }
+            
+            // 检查每个索引的字段是否都存在
+            for (const index of indexes) {
+                index.missingColumns = [];
+                for (const col of index.columns) {
+                    if (!fieldNames.has(col.toLowerCase())) {
+                        index.missingColumns.push(col);
                     }
                 }
             }
@@ -1410,14 +1455,19 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
 
         // 解析字段
         function parseField(fieldDef) {
-            const nameMatch = fieldDef.match(/^[`"']?(\w+)[`"']?\s+(.+)$/i);
+            // 规范化空白字符：将多个空白字符（包括换行）替换为单个空格
+            const normalizedDef = fieldDef.replace(/\s+/g, ' ').trim();
+            
+            // 匹配字段名和剩余定义
+            const nameMatch = normalizedDef.match(/^[`"']?(\w+)[`"']?\s+(.+)$/i);
             if (!nameMatch) return null;
             
             const name = nameMatch[1];
             const rest = nameMatch[2];
             
+            // 匹配类型，支持更多格式
             const typeMatch = rest.match(/^(\w+(?:\s*\([^)]+\))?(?:\s+unsigned)?(?:\s+zerofill)?)/i);
-            const type = typeMatch ? typeMatch[1].trim() : 'UNKNOWN';
+            const type = typeMatch ? typeMatch[1].trim().replace(/\s+/g, ' ') : 'UNKNOWN';
             
             const nullable = !/\bNOT\s+NULL\b/i.test(rest);
             
@@ -1440,35 +1490,38 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
 
         // 解析内联索引（CREATE TABLE 内的索引定义）
         function parseInlineIndex(indexDef) {
+            // 规范化空白字符
+            const normalizedDef = indexDef.replace(/\s+/g, ' ').trim();
+            
             let type = 'INDEX';
             let name = '';
             let columns = [];
             
-            if (/^PRIMARY\s+KEY/i.test(indexDef)) {
+            if (/^PRIMARY\s+KEY/i.test(normalizedDef)) {
                 type = 'PRIMARY';
                 name = 'PRIMARY';
-                const colMatch = indexDef.match(/\(([^)]+)\)/);
+                const colMatch = normalizedDef.match(/\(([^)]+)\)/);
                 if (colMatch) columns = parseIndexColumns(colMatch[1]);
             }
-            else if (/^UNIQUE\s+(KEY|INDEX)/i.test(indexDef)) {
+            else if (/^UNIQUE\s+(KEY|INDEX)/i.test(normalizedDef)) {
                 type = 'UNIQUE';
-                const nameMatch = indexDef.match(/^UNIQUE\s+(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
+                const nameMatch = normalizedDef.match(/^UNIQUE\s+(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
                 if (nameMatch) {
                     name = nameMatch[1];
                     columns = parseIndexColumns(nameMatch[2]);
                 }
             }
-            else if (/^FULLTEXT\s+(KEY|INDEX)/i.test(indexDef)) {
+            else if (/^FULLTEXT\s+(KEY|INDEX)/i.test(normalizedDef)) {
                 type = 'FULLTEXT';
-                const nameMatch = indexDef.match(/^FULLTEXT\s+(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
+                const nameMatch = normalizedDef.match(/^FULLTEXT\s+(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
                 if (nameMatch) {
                     name = nameMatch[1];
                     columns = parseIndexColumns(nameMatch[2]);
                 }
             }
-            else if (/^(KEY|INDEX)/i.test(indexDef)) {
+            else if (/^(KEY|INDEX)/i.test(normalizedDef)) {
                 type = 'INDEX';
-                const nameMatch = indexDef.match(/^(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
+                const nameMatch = normalizedDef.match(/^(?:KEY|INDEX)\s+[`"']?(\w+)[`"']?\s*\(([^)]+)\)/i);
                 if (nameMatch) {
                     name = nameMatch[1];
                     columns = parseIndexColumns(nameMatch[2]);
@@ -1583,11 +1636,21 @@ CREATE UNIQUE INDEX uk_phone ON users (phone);"></textarea>
                 
                 for (const index of table.indexes) {
                     const badgeClass = getIndexBadgeClass(index.type);
+                    const hasMissing = index.missingColumns && index.missingColumns.length > 0;
+                    const columnsHtml = index.columns.map(c => {
+                        const isMissing = index.missingColumns && index.missingColumns.some(m => m.toLowerCase() === c.toLowerCase());
+                        if (isMissing) {
+                            return `<span class="index-column-missing" title="字段不存在">${escapeHtml(c)} ⚠️</span>`;
+                        }
+                        return escapeHtml(c);
+                    }).join(', ');
+                    
                     html += `
-                        <div class="index-item">
+                        <div class="index-item ${hasMissing ? 'index-item-warning' : ''}">
                             <span class="index-badge ${badgeClass}">${getIndexTypeLabel(index.type)}</span>
                             <span class="index-name">${escapeHtml(index.name)}</span>
-                            <span class="index-columns">(${index.columns.map(c => escapeHtml(c)).join(', ')})</span>
+                            <span class="index-columns">(${columnsHtml})</span>
+                            ${hasMissing ? '<span class="index-warning">字段不存在</span>' : ''}
                         </div>
                     `;
                 }
