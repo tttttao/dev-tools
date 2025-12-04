@@ -201,6 +201,68 @@ describe('compareJson - 严格模式 (strict)', () => {
     const orderChanges = result.diffs.filter(d => d.type === 'order_changed')
     expect(orderChanges.length).toBeGreaterThan(0)
   })
+
+  it('删除 key 后，剩余 key 的相对顺序不变时不应报告顺序变化', () => {
+    // 旧: a, b, c (删除 b 后，a 和 c 的相对顺序没变)
+    const old = { a: 1, b: 2, c: 3 }
+    const newObj = { a: 1, c: 3 }
+    
+    const result = compareJson(old, newObj, 'strict')
+    
+    expect(result.isEqual).toBe(false)
+    // 应该只有删除，没有顺序变化
+    const removed = result.diffs.filter(d => d.type === 'removed')
+    const orderChanges = result.diffs.filter(d => d.type === 'order_changed')
+    expect(removed).toHaveLength(1)
+    expect(removed[0].path).toBe('b')
+    expect(orderChanges).toHaveLength(0)
+  })
+
+  it('新增 key 后，原有 key 的相对顺序不变时不应报告顺序变化', () => {
+    // 旧: a, c -> 新: a, b, c (a 和 c 的相对顺序没变)
+    const old = { a: 1, c: 3 }
+    const newObj = { a: 1, b: 2, c: 3 }
+    
+    const result = compareJson(old, newObj, 'strict')
+    
+    expect(result.isEqual).toBe(false)
+    // 应该只有新增，没有顺序变化
+    const added = result.diffs.filter(d => d.type === 'added')
+    const orderChanges = result.diffs.filter(d => d.type === 'order_changed')
+    expect(added).toHaveLength(1)
+    expect(added[0].path).toBe('b')
+    expect(orderChanges).toHaveLength(0)
+  })
+
+  it('删除 key 且剩余 key 相对顺序变化时应报告顺序变化', () => {
+    // 旧: a, b, c -> 新: c, a (删除 b，且 a 和 c 的相对顺序改变)
+    const old = { a: 1, b: 2, c: 3 }
+    const newObj = { c: 3, a: 1 }
+    
+    const result = compareJson(old, newObj, 'strict')
+    
+    expect(result.isEqual).toBe(false)
+    // 应该有删除和顺序变化
+    const removed = result.diffs.filter(d => d.type === 'removed')
+    const orderChanges = result.diffs.filter(d => d.type === 'order_changed')
+    expect(removed).toHaveLength(1)
+    expect(removed[0].path).toBe('b')
+    expect(orderChanges.length).toBeGreaterThan(0)
+  })
+
+  it('多个 key 删除后相对顺序不变时不应报告顺序变化', () => {
+    // 旧: a, b, c, d, e -> 新: a, c, e (删除 b, d，剩余 a, c, e 相对顺序不变)
+    const old = { a: 1, b: 2, c: 3, d: 4, e: 5 }
+    const newObj = { a: 1, c: 3, e: 5 }
+    
+    const result = compareJson(old, newObj, 'strict')
+    
+    expect(result.isEqual).toBe(false)
+    const removed = result.diffs.filter(d => d.type === 'removed')
+    const orderChanges = result.diffs.filter(d => d.type === 'order_changed')
+    expect(removed).toHaveLength(2)
+    expect(orderChanges).toHaveLength(0)
+  })
 })
 
 describe('compareJson - 边界情况', () => {

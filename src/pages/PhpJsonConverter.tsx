@@ -174,7 +174,7 @@ export function PhpJsonConverter() {
             title="清空"
           >
             <ClearIcon />
-            <span>Clear</span>
+            <span>清空</span>
           </button>
         </div>
       </div>

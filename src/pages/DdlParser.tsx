@@ -176,7 +176,7 @@ export function DdlParser() {
             onClick={handleParse}
           >
             <PlayIcon />
-            <span>Parse</span>
+            <span>解析</span>
           </button>
           <button 
             className="action-btn"

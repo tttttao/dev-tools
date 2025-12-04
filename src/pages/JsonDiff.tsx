@@ -143,6 +143,100 @@ function DiffItemRow({ item }: { item: DiffItem }) {
   const color = getDiffTypeColor(item.type)
   const typeName = getDiffTypeName(item.type)
 
+  // 删除和新增类型：单行显示
+  if (item.type === 'removed' || item.type === 'added') {
+    const value = item.type === 'removed' ? item.oldValue : item.newValue
+    return (
+      <div
+        className="mb-3 p-4"
+        style={{
+          background: 'var(--bg-secondary)',
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <span
+            style={{
+              padding: '2px 8px',
+              fontSize: '12px',
+              fontWeight: 500,
+              background: color + '25',
+              color: color,
+              flexShrink: 0,
+            }}
+          >
+            {typeName}
+          </span>
+          <code
+            style={{ 
+              fontSize: '13px',
+              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              color: 'var(--fg-primary)',
+              flexShrink: 0,
+            }}
+          >
+            {item.path}
+          </code>
+          <pre
+            style={{
+              padding: '4px 10px',
+              background: 'var(--bg-tertiary)',
+              color: color,
+              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              fontSize: '13px',
+              lineHeight: '1.5',
+              overflow: 'auto',
+              maxHeight: '100px',
+              margin: 0,
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
+            {formatValue(value)}
+          </pre>
+        </div>
+      </div>
+    )
+  }
+
+  // 顺序变化类型：单行显示
+  if (item.type === 'order_changed') {
+    return (
+      <div
+        className="mb-3 p-4"
+        style={{
+          background: 'var(--bg-secondary)',
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <span
+            style={{
+              padding: '2px 8px',
+              fontSize: '12px',
+              fontWeight: 500,
+              background: color + '25',
+              color: color,
+            }}
+          >
+            {typeName}
+          </span>
+          <code
+            style={{ 
+              fontSize: '13px',
+              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              color: 'var(--fg-primary)' 
+            }}
+          >
+            {item.path}
+          </code>
+          <span style={{ fontSize: '12px', color: 'var(--fg-secondary)' }}>
+            (索引: {item.oldIndex} → {item.newIndex})
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  // 修改类型：双列对比布局
   return (
     <div
       className="mb-3 p-4"
@@ -172,62 +266,55 @@ function DiffItemRow({ item }: { item: DiffItem }) {
         >
           {item.path}
         </code>
-        {item.type === 'order_changed' && (
-          <span style={{ fontSize: '12px', color: 'var(--fg-secondary)' }}>
-            (索引: {item.oldIndex} → {item.newIndex})
-          </span>
-        )}
       </div>
 
       {/* 值对比 */}
-      {item.type !== 'order_changed' && (
-        <div className="flex gap-6">
-          {item.oldValue !== undefined && (
-            <div className="flex-1 min-w-0">
-              <div style={{ color: 'var(--fg-secondary)', fontSize: '12px', marginBottom: '6px' }}>
-                旧值
-              </div>
-              <pre
-                style={{
-                  padding: '10px 12px',
-                  background: 'var(--bg-tertiary)',
-                  color: '#f87171',
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                  fontSize: '13px',
-                  lineHeight: '1.5',
-                  overflow: 'auto',
-                  maxHeight: '150px',
-                  margin: 0,
-                }}
-              >
-                {formatValue(item.oldValue)}
-              </pre>
+      <div className="flex gap-6">
+        {item.oldValue !== undefined && (
+          <div className="flex-1 min-w-0">
+            <div style={{ color: 'var(--fg-secondary)', fontSize: '12px', marginBottom: '6px' }}>
+              旧值
             </div>
-          )}
-          {item.newValue !== undefined && (
-            <div className="flex-1 min-w-0">
-              <div style={{ color: 'var(--fg-secondary)', fontSize: '12px', marginBottom: '6px' }}>
-                新值
-              </div>
-              <pre
-                style={{
-                  padding: '10px 12px',
-                  background: 'var(--bg-tertiary)',
-                  color: '#4ade80',
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                  fontSize: '13px',
-                  lineHeight: '1.5',
-                  overflow: 'auto',
-                  maxHeight: '150px',
-                  margin: 0,
-                }}
-              >
-                {formatValue(item.newValue)}
-              </pre>
+            <pre
+              style={{
+                padding: '10px 12px',
+                background: 'var(--bg-tertiary)',
+                color: '#f87171',
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                fontSize: '13px',
+                lineHeight: '1.5',
+                overflow: 'auto',
+                maxHeight: '150px',
+                margin: 0,
+              }}
+            >
+              {formatValue(item.oldValue)}
+            </pre>
+          </div>
+        )}
+        {item.newValue !== undefined && (
+          <div className="flex-1 min-w-0">
+            <div style={{ color: 'var(--fg-secondary)', fontSize: '12px', marginBottom: '6px' }}>
+              新值
             </div>
-          )}
-        </div>
-      )}
+            <pre
+              style={{
+                padding: '10px 12px',
+                background: 'var(--bg-tertiary)',
+                color: '#4ade80',
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                fontSize: '13px',
+                lineHeight: '1.5',
+                overflow: 'auto',
+                maxHeight: '150px',
+                margin: 0,
+              }}
+            >
+              {formatValue(item.newValue)}
+            </pre>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

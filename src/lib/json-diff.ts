@@ -145,6 +145,7 @@ function compareObjects(
 
 /**
  * 检查 key 顺序（严格模式）
+ * 只检查共同 key 之间的相对顺序变化，忽略因删除/新增导致的索引变化
  */
 function checkKeyOrder(
   oldKeys: string[],
@@ -154,29 +155,40 @@ function checkKeyOrder(
 ): void {
   // 找出共同的 key
   const commonKeys = oldKeys.filter((key) => newKeys.includes(key))
+  
+  // 获取共同 key 在旧数组中的相对顺序
+  const oldCommonOrder = commonKeys.slice().sort((a, b) => 
+    oldKeys.indexOf(a) - oldKeys.indexOf(b)
+  )
+  
+  // 获取共同 key 在新数组中的相对顺序
+  const newCommonOrder = commonKeys.slice().sort((a, b) => 
+    newKeys.indexOf(a) - newKeys.indexOf(b)
+  )
 
-  // 检查共同 key 的相对顺序
-  for (let i = 0; i < commonKeys.length; i++) {
-    const key = commonKeys[i]
-    const oldIndex = oldKeys.indexOf(key)
-    const newIndex = newKeys.indexOf(key)
+  // 只有当共同 key 的相对顺序发生变化时才报告
+  for (let i = 0; i < oldCommonOrder.length; i++) {
+    if (oldCommonOrder[i] !== newCommonOrder[i]) {
+      // 找出在新顺序中位置发生变化的 key
+      const key = oldCommonOrder[i]
+      const newPosition = newCommonOrder.indexOf(key)
+      
+      if (i !== newPosition) {
+        const currentPath = basePath ? `${basePath}.${key}` : key
 
-    // 如果相对位置发生变化（相对于其他共同 key）
-    if (oldIndex !== newIndex) {
-      const currentPath = basePath ? `${basePath}.${key}` : key
+        // 检查是否已经添加过顺序变化
+        const alreadyAdded = diffs.some(
+          (d) => d.path === currentPath && d.type === 'order_changed'
+        )
 
-      // 检查是否已经添加过顺序变化
-      const alreadyAdded = diffs.some(
-        (d) => d.path === currentPath && d.type === 'order_changed'
-      )
-
-      if (!alreadyAdded) {
-        diffs.push({
-          path: currentPath,
-          type: 'order_changed',
-          oldIndex,
-          newIndex,
-        })
+        if (!alreadyAdded) {
+          diffs.push({
+            path: currentPath,
+            type: 'order_changed',
+            oldIndex: i,
+            newIndex: newPosition,
+          })
+        }
       }
     }
   }
