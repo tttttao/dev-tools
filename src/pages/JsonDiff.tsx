@@ -356,15 +356,6 @@ function DiffResultPanel({ result }: { result: DiffResult | null }) {
 
   return (
     <div className="h-full overflow-auto p-4">
-      <div
-        className="flex items-center gap-2 mb-4 pb-3"
-        style={{ borderBottom: '1px solid var(--border-default)' }}
-      >
-        <AlertIcon />
-        <span style={{ color: 'var(--fg-primary)', fontSize: '13px', fontWeight: 500 }}>
-          发现 {result.diffs.length} 处差异
-        </span>
-      </div>
       {result.diffs.map((item, index) => (
         <DiffItemRow key={index} item={item} />
       ))}
@@ -586,18 +577,19 @@ export function JsonDiff() {
           <div className="panel-header">
             <div className="flex items-center gap-2">
               <AlertIcon />
-              <span>差异结果</span>
-              {result && !result.isEqual && (
-                <span
-                  className="px-2 py-0.5 rounded text-xs"
-                  style={{
-                    background: 'var(--accent-primary)',
-                    color: 'white',
-                  }}
-                >
-                  {result.diffs.length}
-                </span>
-              )}
+              <div className="flex items-center gap-1">
+                <span>差异结果</span>
+                {result && !result.isEqual && (
+                  <span
+                    style={{
+                      color: 'var(--fg-secondary)',
+                      fontSize: '12px',
+                    }}
+                  >
+                    (发现 {result.diffs.length} 处差异)
+                  </span>
+                )}
+              </div>
             </div>
             <button className="action-btn" onClick={handleCopyResult} title="复制结果">
               <CopyIcon />
