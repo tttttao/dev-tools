@@ -353,18 +353,19 @@ code, pre, .font-mono {
   color: #f14c4c;
 }
 
-/* Action Bar 按钮 */
+/* Action Bar 按钮 - 矩形风格 */
 .action-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
+  padding: 4px 10px;
   font-size: 12px;
   color: var(--fg-primary);
   background: transparent;
   border: none;
-  border-radius: 3px;
+  border-radius: 0;
   cursor: pointer;
+  transition: background 0.15s ease;
 }
 
 .action-btn:hover {

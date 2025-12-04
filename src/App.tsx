@@ -3,6 +3,7 @@ import { Layout } from './components/layout/Layout'
 import { Home } from './pages/Home'
 import { PhpJsonConverter } from './pages/PhpJsonConverter'
 import { DdlParser } from './pages/DdlParser'
+import { JsonDiff } from './pages/JsonDiff'
 import { ToastProvider } from './hooks/useToast'
 import { ThemeProvider } from './hooks/useTheme'
 
@@ -27,6 +28,9 @@ function App() {
             
             {/* DDL 解析器 */}
             <Route path="/ddl-parser" element={<DdlParser />} />
+            
+            {/* JSON 对比工具 */}
+            <Route path="/json-diff" element={<JsonDiff />} />
           </Routes>
         </Layout>
       </ToastProvider>

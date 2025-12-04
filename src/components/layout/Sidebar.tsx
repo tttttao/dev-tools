@@ -35,6 +35,15 @@ const DatabaseIcon = () => (
   </svg>
 )
 
+const DiffIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M16 3h5v5" />
+    <path d="M8 21H3v-5" />
+    <path d="M21 3L14 10" />
+    <path d="M3 21l7-7" />
+  </svg>
+)
+
 const FileIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -98,6 +107,12 @@ const navItems: NavItem[] = [
     icon: <FileIcon />,
     description: 'parser.tsx',
   },
+  {
+    path: '/json-diff',
+    label: 'JSON 对比',
+    icon: <FileIcon />,
+    description: 'diff.tsx',
+  },
 ]
 
 /**
@@ -107,6 +122,7 @@ const activityItems = [
   { id: 'home', path: '/', icon: <HomeIcon />, label: '首页' },
   { id: 'convert', path: '/php-json', icon: <ConvertIcon />, label: 'PHP/JSON 转换' },
   { id: 'database', path: '/ddl-parser', icon: <DatabaseIcon />, label: 'DDL 解析器' },
+  { id: 'diff', path: '/json-diff', icon: <DiffIcon />, label: 'JSON 对比' },
 ]
 
 /**
