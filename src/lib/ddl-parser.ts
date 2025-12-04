@@ -35,7 +35,7 @@ import type {
  */
 export function parseDDL(ddl: string): DDLParseResult {
   // 移除注释
-  let cleanDDL = ddl
+  const cleanDDL = ddl
     .replace(/--.*$/gm, '') // 单行注释
     .replace(/\/\*[\s\S]*?\*\//g, '') // 多行注释
 

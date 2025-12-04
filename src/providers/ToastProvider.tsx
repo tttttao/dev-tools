@@ -1,38 +1,8 @@
 import type { ReactNode } from 'react'
-import React, { createContext, useContext, useState, useCallback } from 'react'
-
-/**
- * Toast 类型
- */
-type ToastType = 'success' | 'error' | 'info'
-
-/**
- * Toast 数据结构
- */
-interface Toast {
-  id: string
-  message: string
-  type: ToastType
-}
-
-/**
- * Toast 上下文值类型
- */
-interface ToastContextValue {
-  /** 当前显示的 toasts */
-  toasts: Toast[]
-  /** 显示成功消息 */
-  success: (message: string) => void
-  /** 显示错误消息 */
-  error: (message: string) => void
-  /** 显示信息消息 */
-  info: (message: string) => void
-  /** 移除指定 toast */
-  removeToast: (id: string) => void
-}
-
-// 创建上下文
-const ToastContext = createContext<ToastContextValue | null>(null)
+import React, { useState, useCallback } from 'react'
+import { ToastContext } from '../contexts/ToastContext'
+import { CheckIcon, ErrorIcon, InfoIcon, CloseIcon } from '../utils/toast-utils'
+import type { Toast, ToastType } from '../utils/toast-utils'
 
 // Toast 显示时长 (ms)
 const TOAST_DURATION = 3000
@@ -43,38 +13,6 @@ const TOAST_DURATION = 3000
 function generateId(): string {
   return `toast-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 }
-
-/**
- * VS Code 风格图标组件
- */
-const CheckIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <polyline points="20,6 9,17 4,12" />
-  </svg>
-)
-
-const ErrorIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="15" y1="9" x2="9" y2="15" />
-    <line x1="9" y1="9" x2="15" y2="15" />
-  </svg>
-)
-
-const InfoIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="12" y1="16" x2="12" y2="12" />
-    <line x1="12" y1="8" x2="12.01" y2="8" />
-  </svg>
-)
-
-const CloseIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-)
 
 /**
  * ToastProvider 组件
@@ -229,27 +167,4 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       </button>
     </div>
   )
-}
-
-/**
- * useToast Hook
- * 
- * 获取消息提示功能。
- * 
- * @example
- * ```tsx
- * const { success, error } = useToast()
- * 
- * success('操作成功！')
- * error('操作失败：' + err.message)
- * ```
- */
-export function useToast(): ToastContextValue {
-  const context = useContext(ToastContext)
-  
-  if (!context) {
-    throw new Error('useToast must be used within a ToastProvider')
-  }
-  
-  return context
 }

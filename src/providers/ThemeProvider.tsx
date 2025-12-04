@@ -1,27 +1,7 @@
 import type { ReactNode } from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
-
-/**
- * 主题类型
- * - dark: 深色主题
- * - light: 浅色主题
- */
-type Theme = 'dark' | 'light'
-
-/**
- * 主题上下文值类型
- */
-interface ThemeContextValue {
-  /** 当前主题 */
-  theme: Theme
-  /** 切换主题 */
-  toggleTheme: () => void
-  /** 设置指定主题 */
-  setTheme: (theme: Theme) => void
-}
-
-// 创建上下文
-const ThemeContext = createContext<ThemeContextValue | null>(null)
+import { useEffect, useState } from 'react'
+import { ThemeContext } from '../contexts/ThemeContext'
+import type { Theme } from '../utils/theme-utils'
 
 // localStorage 键名
 const THEME_STORAGE_KEY = 'devtools-theme'
@@ -85,24 +65,3 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     </ThemeContext.Provider>
   )
 }
-
-/**
- * useTheme Hook
- * 
- * 获取当前主题和切换函数。
- * 
- * @example
- * ```tsx
- * const { theme, toggleTheme } = useTheme()
- * ```
- */
-export function useTheme(): ThemeContextValue {
-  const context = useContext(ThemeContext)
-  
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider')
-  }
-  
-  return context
-}
-
