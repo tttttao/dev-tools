@@ -4,8 +4,8 @@ import { Home } from './pages/Home'
 import { PhpJsonConverter } from './pages/PhpJsonConverter'
 import { DdlParser } from './pages/DdlParser'
 import { JsonDiff } from './pages/JsonDiff'
-import { ToastProvider } from './hooks/useToast'
-import { ThemeProvider } from './hooks/useTheme'
+import { ToastProvider } from './providers/ToastProvider'
+import { ThemeProvider } from './providers/ThemeProvider'
 
 /**
  * 应用根组件
