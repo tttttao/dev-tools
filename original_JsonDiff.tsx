@@ -167,7 +167,7 @@ function DiffItemRow({ item }: { item: DiffItem }) {
             {typeName}
           </span>
           <code
-            style={{ 
+            style={{
               fontSize: '13px',
               fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
               color: 'var(--fg-primary)',
@@ -220,10 +220,10 @@ function DiffItemRow({ item }: { item: DiffItem }) {
             {typeName}
           </span>
           <code
-            style={{ 
+            style={{
               fontSize: '13px',
               fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-              color: 'var(--fg-primary)' 
+              color: 'var(--fg-primary)'
             }}
           >
             {item.path}
@@ -258,10 +258,10 @@ function DiffItemRow({ item }: { item: DiffItem }) {
           {typeName}
         </span>
         <code
-          style={{ 
+          style={{
             fontSize: '13px',
             fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-            color: 'var(--fg-primary)' 
+            color: 'var(--fg-primary)'
           }}
         >
           {item.path}
@@ -339,9 +339,9 @@ function DiffResultPanel({ result }: { result: DiffResult | null }) {
       <div className="flex flex-col items-center justify-center h-full gap-3">
         <div
           className="flex items-center justify-center"
-          style={{ 
-            width: '48px', 
-            height: '48px', 
+          style={{
+            width: '48px',
+            height: '48px',
             background: '#4ade8020',
           }}
         >
@@ -458,8 +458,8 @@ export function JsonDiff() {
             onChange={(v) => setMode(v as DiffMode)}
           />
 
-          <button 
-            className="action-btn action-btn-primary" 
+          <button
+            className="action-btn action-btn-primary"
             onClick={handleCompare}
             style={{ borderRadius: 0 }}
           >
@@ -467,9 +467,9 @@ export function JsonDiff() {
             <span>对比</span>
           </button>
 
-          <button 
-            className="action-btn" 
-            onClick={handleClear} 
+          <button
+            className="action-btn"
+            onClick={handleClear}
             title="清空"
             style={{ borderRadius: 0 }}
           >
@@ -625,4 +625,3 @@ export function JsonDiff() {
     </div>
   )
 }
-
