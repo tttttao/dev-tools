@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import { useToast } from '../hooks/useToast'
 import { useClipboard } from '../hooks/useClipboard'
 import { parsePHPArray, convertToPHP } from '../lib/php-parser'
@@ -17,20 +18,6 @@ const ClearIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <line x1="18" y1="6" x2="6" y2="18" />
     <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-)
-
-const ArrowRightIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="5" y1="12" x2="19" y2="12" />
-    <polyline points="12,5 19,12 12,19" />
-  </svg>
-)
-
-const ArrowLeftIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="19" y1="12" x2="5" y2="12" />
-    <polyline points="12,19 5,12 12,5" />
   </svg>
 )
 
@@ -150,7 +137,7 @@ export function PhpJsonConverter() {
 
   return (
     <div className="h-full flex flex-col">
-      {/* 标签栏 */}
+      {/* 顶部工具栏 */}
       <div 
         className="flex items-center"
         style={{ 
@@ -158,16 +145,30 @@ export function PhpJsonConverter() {
           borderBottom: '1px solid var(--border-default)'
         }}
       >
-        <div className="editor-tab active">
+        <div className="flex items-center gap-2 px-4 h-[35px] text-[11px] uppercase tracking-wider text-[var(--fg-secondary)] border-r border-[var(--border-default)]">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
           </svg>
           <span>PHP ⇄ JSON</span>
         </div>
         
-        {/* 右侧工具栏 */}
-        <div className="flex-1" />
+        {/* 工具按钮 */}
         <div className="flex items-center gap-1 px-2">
+          <button
+            className="action-btn action-btn-primary"
+            onClick={handlePhpToJson}
+            title="PHP → JSON"
+          >
+            <span>PHP ➔ JSON</span>
+          </button>
+          <button
+            className="action-btn action-btn-primary"
+            onClick={handleJsonToPhp}
+            title="JSON → PHP"
+          >
+            <span>JSON ➔ PHP</span>
+          </button>
+          <div className="w-[1px] h-[16px] bg-[var(--border-default)] mx-2" />
           <button 
             className="action-btn"
             onClick={handleClear}
@@ -179,15 +180,12 @@ export function PhpJsonConverter() {
         </div>
       </div>
 
-      {/* 主内容区 - 双栏布局 */}
-      <div 
-        className="flex-1 flex overflow-hidden"
-        style={{ background: 'var(--bg-primary)' }}
-      >
-        {/* PHP 面板 */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+      {/* 主内容区 - 左右分栏 */}
+      <PanelGroup direction="horizontal" className="flex-1 overflow-hidden">
+        {/* 左侧：PHP 面板 */}
+        <Panel defaultSize={50} minSize={20} className="flex flex-col h-full bg-[var(--bg-primary)]">
           {/* 面板标题 */}
-          <div className="panel-header">
+          <div className="panel-header shrink-0">
             <div className="flex items-center gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -205,44 +203,22 @@ export function PhpJsonConverter() {
           </div>
           
           {/* 编辑器 */}
-          <div className="flex-1 p-2 overflow-hidden">
+          <div className="flex-1 overflow-hidden flex flex-col p-2">
             <CodeEditor
               value={phpInput}
               onChange={setPhpInput}
-              placeholder={`array(
-    'name' => '张三',
-    'age' => 25,
-    'skills' => array('PHP', 'JavaScript')
-)`}
+              placeholder={`array(\n    'name' => '张三',\n    'age' => 25,\n    'skills' => array('PHP', 'JavaScript')\n)`}
             />
           </div>
-        </div>
+        </Panel>
 
-        {/* 中间转换按钮 */}
-        <div 
-          className="flex flex-col items-center justify-center gap-2 px-3"
-          style={{ borderLeft: '1px solid var(--border-default)', borderRight: '1px solid var(--border-default)' }}
-        >
-          <button 
-            className="action-btn action-btn-primary"
-            onClick={handlePhpToJson}
-            title="PHP → JSON"
-          >
-            <ArrowRightIcon />
-          </button>
-          <button 
-            className="action-btn action-btn-primary"
-            onClick={handleJsonToPhp}
-            title="JSON → PHP"
-          >
-            <ArrowLeftIcon />
-          </button>
-        </div>
+        {/* 拖拽分割线 */}
+        <PanelResizeHandle className="w-1 bg-[var(--border-default)] hover:bg-[var(--accent-primary)] cursor-col-resize transition-colors duration-150 delay-75" />
 
-        {/* JSON 面板 */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        {/* 右侧：JSON 面板 */}
+        <Panel className="flex flex-col h-full bg-[var(--bg-primary)]">
           {/* 面板标题 */}
-          <div className="panel-header">
+          <div className="panel-header shrink-0">
             <div className="flex items-center gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -260,19 +236,15 @@ export function PhpJsonConverter() {
           </div>
           
           {/* 编辑器 */}
-          <div className="flex-1 p-2 overflow-hidden">
+          <div className="flex-1 overflow-hidden flex flex-col p-2">
             <CodeEditor
               value={jsonInput}
               onChange={setJsonInput}
-              placeholder={`{
-    "name": "张三",
-    "age": 25,
-    "skills": ["PHP", "JavaScript"]
-}`}
+              placeholder={`{\n    "name": "张三",\n    "age": 25,\n    "skills": ["PHP", "JavaScript"]\n}`}
             />
           </div>
-        </div>
-      </div>
+        </Panel>
+      </PanelGroup>
 
       {/* 使用说明 */}
       <div 

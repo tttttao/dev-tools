@@ -17,8 +17,8 @@
   
   /* 前景色/文字 */
   --fg-primary: #e6e6e6;      /* 主文本 */
-  --fg-secondary: #858585;    /* 次要文本/注释 */
-  --fg-muted: #6e6e6e;        /* 禁用/占位符 */
+  --fg-secondary: #999999;    /* 次要文本/注释 */
+  --fg-muted: #808080;        /* 禁用/占位符 */
   --fg-accent: #3794ff;       /* 强调文本 */
   
   /* 边框 - 微妙细线 */
@@ -71,8 +71,8 @@
   --bg-input: #ffffff;
   
   --fg-primary: #333333;
-  --fg-secondary: #616161;
-  --fg-muted: #a0a0a0;
+  --fg-secondary: #555555;
+  --fg-muted: #777777;
   --fg-accent: #0066bf;
   
   --border-default: #e5e5e5;
@@ -303,7 +303,7 @@ code, pre, .font-mono {
 }
 
 .ide-table td {
-  padding: 4px 12px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--border-subtle);
   vertical-align: middle;
 }

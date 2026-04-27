@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import { useToast } from '../hooks/useToast'
 import { useClipboard } from '../hooks/useClipboard'
 import { parseDDL, generateMarkdown, getIndexTypeLabel } from '../lib/ddl-parser'
@@ -94,7 +95,6 @@ function CodeEditor({
 export function DdlParser() {
   const [ddlInput, setDdlInput] = useState('')
   const [parseResult, setParseResult] = useState<DDLParseResult | null>(null)
-  const [activeTab, setActiveTab] = useState<'input' | 'result'>('input')
   
   const { success, error } = useToast()
   const { copy } = useClipboard()
@@ -114,7 +114,6 @@ export function DdlParser() {
       }
       
       setParseResult(result)
-      setActiveTab('result')
       success('解析成功！')
     } catch (err) {
       error('解析失败：' + (err instanceof Error ? err.message : '未知错误'))
@@ -124,7 +123,6 @@ export function DdlParser() {
   const handleClear = () => {
     setDdlInput('')
     setParseResult(null)
-    setActiveTab('input')
   }
 
   const handleCopyMarkdown = async () => {
@@ -140,7 +138,7 @@ export function DdlParser() {
 
   return (
     <div className="h-full flex flex-col">
-      {/* 编辑器标签栏 */}
+      {/* 顶部工具栏 */}
       <div 
         className="flex items-center"
         style={{ 
@@ -148,29 +146,7 @@ export function DdlParser() {
           borderBottom: '1px solid var(--border-default)'
         }}
       >
-        <div 
-          className={`editor-tab ${activeTab === 'input' ? 'active' : ''}`}
-          onClick={() => setActiveTab('input')}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14,2 14,8 20,8" />
-          </svg>
-          <span>SQL Input</span>
-        </div>
-        {parseResult && (
-          <div 
-            className={`editor-tab ${activeTab === 'result' ? 'active' : ''}`}
-            onClick={() => setActiveTab('result')}
-          >
-            <TableIcon />
-            <span>Parsed Result</span>
-          </div>
-        )}
-        
-        {/* 右侧工具栏 */}
-        <div className="flex-1" />
-        <div className="flex items-center gap-1 px-2">
+        <div className="flex items-center gap-1 px-2 h-[35px]">
           <button 
             className="action-btn action-btn-primary"
             onClick={handleParse}
@@ -189,33 +165,48 @@ export function DdlParser() {
             className="action-btn"
             onClick={handleCopyMarkdown}
             title="复制为 Markdown"
+            disabled={!parseResult}
+            style={{ opacity: !parseResult ? 0.5 : 1 }}
           >
             <CopyIcon />
+            <span>复制 Markdown</span>
           </button>
         </div>
       </div>
 
-      {/* 主内容区 */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {activeTab === 'input' ? (
-          /* 编辑器面板 */
+      {/* 主内容区 - 左右分栏 */}
+      <PanelGroup direction="horizontal" className="flex-1 overflow-hidden">
+        {/* 左侧：输入区 */}
+        <Panel defaultSize={40} minSize={20} className="flex flex-col h-full">
+          <div className="panel-header shrink-0">
+            <div className="flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14,2 14,8 20,8" />
+              </svg>
+              <span>SQL Input</span>
+            </div>
+          </div>
           <CodeEditor
             value={ddlInput}
             onChange={setDdlInput}
-            placeholder={`-- 输入 MySQL DDL 语句
-CREATE TABLE \`users\` (
-    \`id\` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-    \`username\` varchar(50) NOT NULL COMMENT '用户名',
-    \`email\` varchar(100) NOT NULL COMMENT '邮箱',
-    PRIMARY KEY (\`id\`),
-    UNIQUE KEY \`uk_username\` (\`username\`),
-    KEY \`idx_email\` (\`email\`)
-) ENGINE=InnoDB COMMENT='用户表';`}
+            placeholder={`-- 输入 MySQL DDL 语句\nCREATE TABLE \`users\` (\n    \`id\` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',\n    \`username\` varchar(50) NOT NULL COMMENT '用户名',\n    \`email\` varchar(100) NOT NULL COMMENT '邮箱',\n    PRIMARY KEY (\`id\`),\n    UNIQUE KEY \`uk_username\` (\`username\`),\n    KEY \`idx_email\` (\`email\`)\n) ENGINE=InnoDB COMMENT='用户表';`}
           />
-        ) : (
-          /* 结果面板 */
+        </Panel>
+
+        {/* 拖拽分割线 */}
+        <PanelResizeHandle className="w-1 bg-[var(--border-default)] hover:bg-[var(--accent-primary)] cursor-col-resize transition-colors duration-150 delay-75" />
+
+        {/* 右侧：结果区 */}
+        <Panel className="flex flex-col h-full bg-[var(--bg-primary)]">
+          <div className="panel-header shrink-0">
+            <div className="flex items-center gap-2">
+              <TableIcon />
+              <span>Parsed Result</span>
+            </div>
+          </div>
           <div className="flex-1 overflow-auto">
-            {parseResult && (
+            {parseResult ? (
               <div className="p-0">
                 {parseResult.tables.map((table) => (
                   <TableResult key={table.tableName} table={table} />
@@ -238,10 +229,14 @@ CREATE TABLE \`users\` (
                   </div>
                 )}
               </div>
+            ) : (
+              <div className="flex items-center justify-center h-full text-[var(--fg-muted)]">
+                在左侧输入 DDL 语句并点击解析
+              </div>
             )}
           </div>
-        )}
-      </div>
+        </Panel>
+      </PanelGroup>
     </div>
   )
 }

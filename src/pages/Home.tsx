@@ -90,12 +90,12 @@ export function Home() {
 
   return (
     <div 
-      className="h-full flex items-center justify-center"
+      className="h-full flex flex-col overflow-auto p-8"
       style={{ background: 'var(--bg-primary)' }}
     >
-      <div className="w-full max-w-lg px-6">
+      <div className="w-full max-w-3xl mx-auto mt-12">
         {/* Logo + 标题 */}
-        <div className="text-center mb-8">
+        <div className="flex flex-col items-center mb-12">
           <div 
             className="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-4"
             style={{ 
@@ -119,112 +119,108 @@ export function Home() {
           </p>
         </div>
 
-        {/* 主要操作按钮 */}
-        <div className="flex gap-4 mb-10">
-          <Link
-            to="/php-json"
-            className="flex-1 flex items-center gap-3 px-5 py-3.5 rounded transition-colors"
-            style={{
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--fg-primary)',
-              textDecoration: 'none',
-            }}
-          >
-            <ConvertIcon />
-            <span className="text-sm">PHP/JSON</span>
-          </Link>
-          <Link
-            to="/ddl-parser"
-            className="flex-1 flex items-center gap-3 px-5 py-3.5 rounded transition-colors"
-            style={{
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--fg-primary)',
-              textDecoration: 'none',
-            }}
-          >
-            <DatabaseIcon />
-            <span className="text-sm">DDL Parser</span>
-          </Link>
-        </div>
-
-        {/* 可用工具列表 */}
-        <div className="mb-6">
-          <div 
-            className="flex items-center justify-between mb-2 px-1"
-          >
-            <span 
-              className="text-xs"
-              style={{ color: 'var(--fg-muted)' }}
-            >
-              Available tools
-            </span>
-            <span 
-              className="text-xs"
-              style={{ color: 'var(--fg-muted)' }}
-            >
-              View all ({tools.length})
-            </span>
-          </div>
-          
-          <div className="space-y-0.5">
-            {availableTools.map((tool) => (
-              <Link
-                key={tool.path}
-                to={tool.path}
-                className="flex items-center justify-between px-3 py-2.5 rounded transition-colors hover:bg-[var(--bg-hover)]"
-                style={{
-                  color: 'var(--fg-primary)',
-                  textDecoration: 'none',
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <span style={{ color: 'var(--fg-secondary)' }}>{tool.icon}</span>
-                  <span className="text-sm">{tool.title}</span>
-                </div>
-                <span 
-                  className="text-xs"
-                  style={{ color: 'var(--fg-muted)' }}
-                >
-                  {tool.description}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* 即将推出 */}
-        {comingSoonTools.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* 可用工具列表 */}
           <div>
             <div 
-              className="flex items-center justify-between mb-2 px-1"
+              className="flex items-center justify-between mb-4 px-1"
             >
               <span 
-                className="text-xs"
+                className="text-xs uppercase tracking-wider font-medium"
                 style={{ color: 'var(--fg-muted)' }}
               >
-                Coming soon
+                Available tools
               </span>
             </div>
             
-            <div className="space-y-0.5">
-              {comingSoonTools.map((tool, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between px-3 py-2.5 rounded opacity-50"
-                  style={{ color: 'var(--fg-secondary)' }}
+            <div className="grid gap-3">
+              {availableTools.map((tool) => (
+                <Link
+                  key={tool.path}
+                  to={tool.path}
+                  className="flex flex-col p-4 rounded-lg border transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                  style={{
+                    background: 'var(--bg-tertiary)',
+                    borderColor: 'var(--border-default)',
+                    color: 'var(--fg-primary)',
+                    textDecoration: 'none',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--accent-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--border-default)';
+                  }}
                 >
-                  <div className="flex items-center gap-3">
-                    <span>{tool.icon}</span>
-                    <span className="text-sm">{tool.title}</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div
+                      className="p-2 rounded-md"
+                      style={{ background: 'var(--bg-secondary)', color: 'var(--accent-primary)' }}
+                    >
+                      {tool.icon}
+                    </div>
+                    <span className="font-medium">{tool.title}</span>
                   </div>
-                  <ChevronRightIcon />
-                </div>
+                  <span
+                    className="text-sm ml-[44px]"
+                    style={{ color: 'var(--fg-secondary)' }}
+                  >
+                    Click to start using the {tool.title}
+                  </span>
+                </Link>
               ))}
             </div>
           </div>
-        )}
+
+          {/* 即将推出 */}
+          {comingSoonTools.length > 0 && (
+            <div>
+              <div
+                className="flex items-center justify-between mb-4 px-1"
+              >
+                <span
+                  className="text-xs uppercase tracking-wider font-medium"
+                  style={{ color: 'var(--fg-muted)' }}
+                >
+                  Coming soon
+                </span>
+              </div>
+
+              <div className="grid gap-3">
+                {comingSoonTools.map((tool, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col p-4 rounded-lg border opacity-60"
+                    style={{
+                      background: 'var(--bg-tertiary)',
+                      borderColor: 'var(--border-default)',
+                      color: 'var(--fg-secondary)'
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="p-2 rounded-md"
+                          style={{ background: 'var(--bg-secondary)' }}
+                        >
+                          {tool.icon}
+                        </div>
+                        <span className="font-medium">{tool.title}</span>
+                      </div>
+                      <ChevronRightIcon />
+                    </div>
+                    <span
+                      className="text-sm ml-[44px]"
+                      style={{ color: 'var(--fg-muted)' }}
+                    >
+                      Currently in development
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
