@@ -208,7 +208,7 @@ function parseTokens(tokens: Token[]): PHPValue {
    * 解析数组
    */
   function parseArray(): PHPValue {
-    const result: PHPObject = {}
+    const result: PHPObject = Object.create(null)
     let isIndexedArray = true
     let index = 0
 
