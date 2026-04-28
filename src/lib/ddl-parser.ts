@@ -39,7 +39,7 @@ export function parseDDL(ddl: string): DDLParseResult {
     .replace(/--.*$/gm, '') // 单行注释
     .replace(/\/\*[\s\S]*?\*\//g, '') // 多行注释
 
-  const tables: Record<string, TableInfo> = {}
+  const tables = new Map<string, TableInfo>()
   const standaloneIndexes: StandaloneIndex[] = []
 
   // 分割语句
@@ -52,7 +52,7 @@ export function parseDDL(ddl: string): DDLParseResult {
     // 解析 CREATE TABLE
     if (/CREATE\s+TABLE/i.test(stmt)) {
       const tableResult = parseCreateTable(stmt)
-      tables[tableResult.tableName.toLowerCase()] = tableResult
+      tables.set(tableResult.tableName.toLowerCase(), tableResult)
     }
     // 解析 CREATE INDEX
     else if (/CREATE\s+(UNIQUE\s+)?INDEX/i.test(stmt)) {
@@ -60,9 +60,9 @@ export function parseDDL(ddl: string): DDLParseResult {
       if (indexResult) {
         const tableName = indexResult.tableName.toLowerCase()
 
-        if (tables[tableName]) {
+        if (tables.has(tableName)) {
           // 将索引添加到已有的表中
-          const table = tables[tableName]
+          const table = tables.get(tableName)!
           const fieldNames = new Set(table.fields.map((f) => f.name.toLowerCase()))
 
           // 检查索引字段是否存在
@@ -99,7 +99,7 @@ export function parseDDL(ddl: string): DDLParseResult {
   }
 
   return {
-    tables: Object.values(tables),
+    tables: Array.from(tables.values()),
     standaloneIndexes,
   }
 }
