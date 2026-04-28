@@ -133,11 +133,14 @@ export function Sidebar() {
   const { theme, toggleTheme } = useTheme()
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-full w-full">
       {/* Activity Bar - 左侧图标栏 */}
       <div 
-        className="w-12 flex flex-col items-center py-2"
-        style={{ background: 'var(--bg-secondary)' }}
+        className="w-12 shrink-0 flex flex-col items-center py-2 z-10"
+        style={{
+          background: 'var(--bg-secondary)',
+          borderRight: '1px solid var(--border-default)'
+        }}
       >
         {/* 顶部图标 - 可点击路由 */}
         <div className="flex-1 flex flex-col items-center gap-1">
@@ -172,10 +175,9 @@ export function Sidebar() {
 
       {/* Explorer - 文件树区域 */}
       <div 
-        className="w-52 flex flex-col"
+        className="flex-1 flex flex-col min-w-0"
         style={{ 
-          background: 'var(--bg-secondary)',
-          borderRight: '1px solid var(--border-default)'
+          background: 'var(--bg-secondary)'
         }}
       >
         {/* Explorer 标题 */}

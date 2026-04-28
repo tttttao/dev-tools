@@ -37,12 +37,6 @@ const LockIcon = () => (
   </svg>
 )
 
-const ChevronRightIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="9,18 15,12 9,6" />
-  </svg>
-)
-
 /**
  * 工具配置
  */
@@ -59,13 +53,19 @@ const tools: ToolConfig[] = [
     path: '/php-json',
     icon: <ConvertIcon />,
     title: 'PHP/JSON Converter',
-    description: '~/code',
+    description: 'Convert between PHP serialization and JSON formats',
   },
   {
     path: '/ddl-parser',
     icon: <DatabaseIcon />,
     title: 'DDL Parser',
-    description: '~/code',
+    description: 'Parse SQL DDL to various structures',
+  },
+  {
+    path: '/json-diff',
+    icon: <ConvertIcon />,
+    title: 'JSON Diff',
+    description: 'Compare JSON objects and find differences',
   },
   {
     path: '#',
@@ -82,7 +82,7 @@ const tools: ToolConfig[] = [
 ]
 
 /**
- * Home 页面 - Cursor 欢迎页风格
+ * Home 页面 - VS Code 欢迎页风格
  */
 export function Home() {
   const availableTools = tools.filter(t => !t.comingSoon)
@@ -90,141 +90,122 @@ export function Home() {
 
   return (
     <div 
-      className="h-full flex items-center justify-center"
+      className="h-full flex flex-col overflow-auto p-12 lg:p-20"
       style={{ background: 'var(--bg-primary)' }}
     >
-      <div className="w-full max-w-lg px-6">
-        {/* Logo + 标题 */}
-        <div className="text-center mb-8">
+      <div className="max-w-[1200px] w-full">
+        {/* Header - Left Aligned */}
+        <div className="flex items-center gap-6 mb-16">
           <div 
-            className="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-4"
-            style={{ 
-              background: 'var(--bg-tertiary)',
-              color: 'var(--accent-primary)'
-            }}
+            className="inline-flex items-center justify-center w-16 h-16"
+            style={{ color: 'var(--accent-primary)' }}
           >
             <LogoIcon />
           </div>
-          <h1 
-            className="text-xl font-medium mb-1"
-            style={{ color: 'var(--fg-primary)' }}
-          >
-            DevTools
-          </h1>
-          <p 
-            className="text-xs"
-            style={{ color: 'var(--fg-muted)' }}
-          >
-            Pro • <span style={{ color: 'var(--accent-primary)' }}>Settings</span>
-          </p>
-        </div>
-
-        {/* 主要操作按钮 */}
-        <div className="flex gap-4 mb-10">
-          <Link
-            to="/php-json"
-            className="flex-1 flex items-center gap-3 px-5 py-3.5 rounded transition-colors"
-            style={{
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--fg-primary)',
-              textDecoration: 'none',
-            }}
-          >
-            <ConvertIcon />
-            <span className="text-sm">PHP/JSON</span>
-          </Link>
-          <Link
-            to="/ddl-parser"
-            className="flex-1 flex items-center gap-3 px-5 py-3.5 rounded transition-colors"
-            style={{
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--fg-primary)',
-              textDecoration: 'none',
-            }}
-          >
-            <DatabaseIcon />
-            <span className="text-sm">DDL Parser</span>
-          </Link>
-        </div>
-
-        {/* 可用工具列表 */}
-        <div className="mb-6">
-          <div 
-            className="flex items-center justify-between mb-2 px-1"
-          >
-            <span 
-              className="text-xs"
+          <div className="flex flex-col">
+            <h1
+              className="text-4xl font-light mb-1"
+              style={{ color: 'var(--fg-primary)' }}
+            >
+              DevTools
+            </h1>
+            <p
+              className="text-sm"
               style={{ color: 'var(--fg-muted)' }}
             >
-              Available tools
-            </span>
-            <span 
-              className="text-xs"
-              style={{ color: 'var(--fg-muted)' }}
-            >
-              View all ({tools.length})
-            </span>
-          </div>
-          
-          <div className="space-y-0.5">
-            {availableTools.map((tool) => (
-              <Link
-                key={tool.path}
-                to={tool.path}
-                className="flex items-center justify-between px-3 py-2.5 rounded transition-colors hover:bg-[var(--bg-hover)]"
-                style={{
-                  color: 'var(--fg-primary)',
-                  textDecoration: 'none',
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <span style={{ color: 'var(--fg-secondary)' }}>{tool.icon}</span>
-                  <span className="text-sm">{tool.title}</span>
-                </div>
-                <span 
-                  className="text-xs"
-                  style={{ color: 'var(--fg-muted)' }}
-                >
-                  {tool.description}
-                </span>
-              </Link>
-            ))}
+              Editing evolved
+            </p>
           </div>
         </div>
 
-        {/* 即将推出 */}
-        {comingSoonTools.length > 0 && (
-          <div>
-            <div 
-              className="flex items-center justify-between mb-2 px-1"
+        {/* Layout: Start & Recent (Coming Soon) */}
+        <div className="flex flex-col md:flex-row gap-16 md:gap-32">
+          {/* Available Tools */}
+          <div className="flex-1 max-w-[400px]">
+            <h2
+              className="text-lg mb-4 font-normal"
+              style={{ color: 'var(--fg-primary)' }}
             >
-              <span 
-                className="text-xs"
-                style={{ color: 'var(--fg-muted)' }}
-              >
-                Coming soon
-              </span>
-            </div>
+              Start
+            </h2>
             
-            <div className="space-y-0.5">
-              {comingSoonTools.map((tool, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between px-3 py-2.5 rounded opacity-50"
-                  style={{ color: 'var(--fg-secondary)' }}
+            <div className="flex flex-col gap-1">
+              {availableTools.map((tool) => (
+                <Link
+                  key={tool.title}
+                  to={tool.path}
+                  className="flex items-start gap-3 px-2 py-2 rounded-md transition-colors hover:bg-[var(--bg-hover)]"
+                  style={{ textDecoration: 'none' }}
                 >
-                  <div className="flex items-center gap-3">
-                    <span>{tool.icon}</span>
-                    <span className="text-sm">{tool.title}</span>
+                  <div
+                    className="mt-0.5"
+                    style={{ color: 'var(--accent-primary)' }}
+                  >
+                    {tool.icon}
                   </div>
-                  <ChevronRightIcon />
-                </div>
+                  <div className="flex flex-col">
+                    <span
+                      className="text-[15px] leading-5"
+                      style={{ color: 'var(--accent-primary)' }}
+                    >
+                      {tool.title}
+                    </span>
+                    {tool.description && (
+                      <span
+                        className="text-[13px] leading-5"
+                        style={{ color: 'var(--fg-muted)' }}
+                      >
+                        {tool.description}
+                      </span>
+                    )}
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
-        )}
+
+          {/* Coming Soon */}
+          {comingSoonTools.length > 0 && (
+            <div className="flex-1 max-w-[400px]">
+              <h2
+                className="text-lg mb-4 font-normal"
+                style={{ color: 'var(--fg-primary)' }}
+              >
+                Coming Soon
+              </h2>
+
+              <div className="flex flex-col gap-1">
+                {comingSoonTools.map((tool, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start gap-3 px-2 py-2 rounded-md opacity-60"
+                  >
+                    <div
+                      className="mt-0.5"
+                      style={{ color: 'var(--fg-secondary)' }}
+                    >
+                      {tool.icon}
+                    </div>
+                    <div className="flex flex-col">
+                      <span
+                        className="text-[15px] leading-5"
+                        style={{ color: 'var(--fg-secondary)' }}
+                      >
+                        {tool.title}
+                      </span>
+                      <span
+                        className="text-[13px] leading-5"
+                        style={{ color: 'var(--fg-muted)' }}
+                      >
+                        Currently in development
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
