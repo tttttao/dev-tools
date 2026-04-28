@@ -7,6 +7,7 @@ import {
   getDiffTypeName,
   getDiffTypeColor,
 } from '../lib/json-diff'
+import { safeJsonParse } from '../utils/json-utils'
 import type { DiffMode, DiffResult, DiffItem } from '../types/json-diff'
 
 /**
@@ -382,8 +383,8 @@ export function JsonDiff() {
     }
 
     try {
-      const oldObj = JSON.parse(oldJson)
-      const newObj = JSON.parse(newJson)
+      const oldObj = safeJsonParse(oldJson)
+      const newObj = safeJsonParse(newJson)
       const diffResult = compareJson(oldObj, newObj, mode)
       setResult(diffResult)
 
