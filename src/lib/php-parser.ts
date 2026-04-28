@@ -367,15 +367,7 @@ function convertBrackets(str: string): string {
  * 替换 array() 语法为 []
  */
 function replaceArraySyntax(str: string): string {
-  let result = str
-  let changed = true
-  
-  while (changed) {
-    const before = result
-    result = result.replace(/\barray\s*\(/g, '[')
-    changed = before !== result
-  }
-  
+  const result = str.replace(/\barray\s*\(/g, '[')
   return balanceParentheses(result)
 }
 
