@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useToast } from '../hooks/useToast'
 import { useClipboard } from '../hooks/useClipboard'
 import { parsePHPArray, convertToPHP } from '../lib/php-parser'
+import { safeJsonParse } from '../utils/json-utils'
 
 /**
  * VS Code 风格图标
@@ -116,7 +117,7 @@ export function PhpJsonConverter() {
     }
 
     try {
-      const jsonObj = JSON.parse(jsonInput)
+      const jsonObj = safeJsonParse(jsonInput)
       const phpString = convertToPHP(jsonObj)
       setPhpInput(phpString)
       success('转换成功！')

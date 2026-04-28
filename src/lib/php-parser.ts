@@ -8,6 +8,7 @@
  */
 
 import type { Token, TokenType, PHPValue, PHPObject, PHPArray } from '../types/php'
+import { safeJsonParse } from '../utils/json-utils'
 
 // ==================== PHP -> JSON ====================
 
@@ -291,7 +292,7 @@ export function simpleParsePHPArray(phpString: string): PHPValue {
   // 转换关联数组的括号 [] -> {}
   cleanString = convertBrackets(cleanString)
 
-  return JSON.parse(cleanString)
+  return safeJsonParse(cleanString)
 }
 
 /**
